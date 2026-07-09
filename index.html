@@ -2049,7 +2049,7 @@ var CFG = {
 
   // ── GOOGLE SHEETS ─────────────────────────────────────────
   // Paste your Apps Script Web App URL here after deploying
-  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbx0ZzJZtqUGZOrlgxrMdEPyv1ZLK_-z4k2xkv0D2-oaa3bEeVyRDyxooZ1R-vEYCUQh/exec',
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbx6kXzt8-GwTPLBhvVEs2uAvln3Z6QR8JS18S5Fc7fFao-7KwOR64QnVoxHwRB2tISX/exec',
 
   // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
   // This does not hide the URL above (it's public in this file),
@@ -2528,7 +2528,7 @@ function allFiles(){
 // ════════════════════════════════════════════════════════════
 //  GOOGLE SHEETS BACKEND
 // ════════════════════════════════════════════════════════════
-var _token=null,_folderId=null,_folderUrl='';
+var _token=null,_sessionToken=null,_folderId=null,_folderUrl='';
 var _sessionStart=null;      // when form was opened
 var _sessionTimeout=null;    // timeout timer handle
 var _sessionWarned=false;    // whether warning already shown
@@ -2540,7 +2540,8 @@ function getToken(){
     .then(function(r){return r.json();})
     .then(function(d){
       if(d.status!=='ok') throw new Error('Token error: '+d.message);
-      _token=d.token;
+      _token=d.token;               // OAuth token for Drive uploads
+      _sessionToken=d.sessionToken;  // Session token for security
       _folderId=d.folderId;
       // Start session timer when token is received
       _sessionStart=Date.now();
@@ -2596,6 +2597,7 @@ function showSessionWarning(){
 function expireSession(){
   // Clear token — form can no longer submit
   _token=null;
+  _sessionToken=null;
 
   // Show full-screen timeout overlay
   var ov=document.createElement('div');
@@ -2762,7 +2764,7 @@ function sub(){
       var gsSave=fetch(CFG.GSHEET_URL,{
         method:'POST',
         headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body:JSON.stringify({formKey:CFG.FORM_KEY,token:_token,textData:textData,fileLinks:uploadedLinks,folderUrl:_folderUrl,customerName:customerName,submittedAt:submittedAt})
+        body:JSON.stringify({formKey:CFG.FORM_KEY,token:_token,sessionToken:_sessionToken,textData:textData,fileLinks:uploadedLinks,folderUrl:_folderUrl,customerName:customerName,submittedAt:submittedAt})
       }).then(function(r){return r.text();});
       saves.push(gsSave);
     }
