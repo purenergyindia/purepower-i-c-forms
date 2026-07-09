@@ -1,0 +1,3117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#eef2f7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>PuREPower I&C Forms (All Models)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g9:#0f3d1f;--g7:#166534;--g6:#16a34a;--g5:#22c55e;--g1:#dcfce7;--g0:#f0fdf4;
+  --am:#f59e0b;--am0:#fffbeb;--am1:#fde68a;
+  --rd:#ef4444;--rd0:#fef2f2;
+  --bl:#3b82f6;--bl0:#eff6ff;--bl1:#dbeafe;
+  --s9:#0f172a;--s7:#334155;--s5:#64748b;--s4:#94a3b8;
+  --s3:#cbd5e1;--s2:#e2e8f0;--s1:#f1f5f9;--s0:#f8fafc;--wh:#fff;
+  --rxs:6px;--rsm:10px;--rmd:14px;--rlg:16px;--rxl:20px;
+  --sh-sm:0 1px 4px rgba(0,0,0,.07);
+  --sh-md:0 4px 16px rgba(0,0,0,.1);
+  --sh-lg:0 8px 32px rgba(0,0,0,.13);
+  --tap:48px;
+  --font:'Plus Jakarta Sans',sans-serif;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  font-family:var(--font);
+  background:#eef2f7;
+  min-height:100vh;
+  color:var(--s9);
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  padding-bottom:env(safe-area-inset-bottom, 0px);
+  background-color:#eef2f7;
+}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:linear-gradient(135deg,var(--g9),var(--g7) 60%,#1a7a3a);
+  position:sticky;top:0;z-index:200;
+  box-shadow:0 2px 16px rgba(15,61,31,.4);
+}
+.topbar-in{
+  max-width:920px;margin:0 auto;padding:0 14px;
+  display:flex;align-items:center;gap:10px;height:52px;
+}
+.logo{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:var(--am);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:11px;color:var(--g9);
+}
+.topbar-title{min-width:0;flex:1}
+.topbar-title h1{font-size:13px;font-weight:700;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-title p{font-size:10px;color:rgba(255,255,255,.6);margin-top:1px;display:none}
+.vpill{flex-shrink:0;background:rgba(255,255,255,.15);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;border:1px solid rgba(255,255,255,.2);white-space:nowrap}
+@media(min-width:540px){
+  .topbar-in{height:58px;padding:0 20px;gap:14px}
+  .logo{width:36px;height:36px;font-size:12px}
+  .topbar-title h1{font-size:14px}
+  .topbar-title p{display:block}
+  .vpill{font-size:11px;padding:4px 10px}
+}
+
+/* ── PROGRESS BAR ── */
+.pb-wrap{
+  background:var(--wh);border-bottom:1px solid var(--s2);
+  position:sticky;top:52px;z-index:199;
+  padding:8px 14px;box-shadow:var(--sh-sm);
+}
+.pb-in{max-width:920px;margin:0 auto}
+.pb-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.pb-lbl{font-size:11px;font-weight:500;color:var(--s5)}
+.pb-pct{font-size:11px;font-weight:700;color:var(--g6)}
+.pb-track{height:5px;background:var(--s2);border-radius:99px;overflow:hidden}
+.pb-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--g6),var(--g5));border-radius:99px;transition:width .4s ease}
+@media(min-width:540px){.pb-wrap{top:58px;padding:10px 20px}}
+
+/* ── MAIN ── */
+.main{max-width:920px;margin:0 auto;padding:12px 10px calc(120px + env(safe-area-inset-bottom, 20px))}
+@media(min-width:480px){.main{padding:16px 14px calc(120px + env(safe-area-inset-bottom, 20px))}}
+@media(min-width:769px){.main{padding:22px 20px 80px}}
+
+/* ── DB BANNER ── */
+.db-banner{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 12px;
+  background:var(--bl0);border:1px solid var(--bl1);
+  border-radius:var(--rsm);margin-bottom:12px;
+  font-size:11px;color:var(--s7);flex-wrap:wrap;
+}
+.db-dot{width:7px;height:7px;border-radius:50%;background:var(--g5);flex-shrink:0;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+.db-dot.sql{background:var(--bl)}
+.db-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--g1);color:var(--g7);white-space:nowrap}
+.db-badge.sql-badge{background:var(--bl1);color:#1e40af}
+
+/* ── CARD ── */
+.card{
+  background:var(--wh);border:1px solid var(--s2);
+  border-radius:14px;margin-bottom:10px;
+  box-shadow:var(--sh-sm);overflow:hidden;
+}
+@media(min-width:540px){.card{margin-bottom:14px;border-radius:18px}}
+@media(min-width:769px){.card{margin-bottom:16px}.card:hover{box-shadow:var(--sh-md)}}
+
+/* ── CARD HEADER ── */
+.ch{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 14px;
+  background:var(--s0);border-bottom:1px solid var(--s2);
+  cursor:pointer;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .15s;
+  min-height:var(--tap);
+}
+.ch:active{background:var(--g0)}
+@media(min-width:769px){.ch:hover{background:var(--g0)}}
+.ci{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:var(--g1);color:var(--g7);
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.ct{font-size:13px;font-weight:700;color:var(--g9);flex:1;line-height:1.3}
+.cv{font-size:13px;color:var(--s4);transition:transform .25s;flex-shrink:0;padding:4px}
+.cv.open{transform:rotate(180deg)}
+.cb{padding:14px}
+.cb.col{display:none}
+@media(min-width:540px){
+  .ch{padding:14px 18px;gap:12px}
+  .ci{width:34px;height:34px;font-size:16px;border-radius:10px}
+  .cb{padding:18px}
+}
+@media(min-width:769px){.cb{padding:22px}}
+
+/* ── SECTION SUBHEADERS ── */
+.sh{
+  display:flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:700;color:var(--g7);
+  padding:7px 10px;
+  background:var(--g0);border:1px solid var(--g1);
+  border-radius:var(--rsm);margin:16px 0 12px;
+}
+.bh{
+  display:flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:700;color:#92400e;
+  padding:7px 10px;
+  background:var(--am0);border:1px solid var(--am1);
+  border-radius:var(--rsm);margin:16px 0 12px;
+}
+.sh:first-child,.bh:first-child{margin-top:0}
+@media(min-width:540px){.sh,.bh{font-size:12px;padding:8px 12px;margin:20px 0 14px}}
+
+/* ── FIELDS ── */
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.fl{
+  display:block;font-size:12px;font-weight:600;
+  color:var(--s7);margin-bottom:6px;line-height:1.5;
+}
+.fh{display:block;font-size:11px;color:var(--s4);margin-bottom:5px;margin-top:-3px;font-style:italic}
+.req{color:var(--rd)}
+@media(min-width:540px){.field{margin-bottom:16px}}
+
+/* ── INPUTS — 16px stops iOS zoom ── */
+input[type=text],input[type=email],input[type=tel],
+input[type=number],input[type=date],input[type=password],
+select,textarea{
+  width:100%;
+  padding:13px 14px;
+  border:1.5px solid var(--s2);border-radius:var(--rsm);
+  font-family:var(--font);
+  font-size:16px;
+  color:var(--s9);background:var(--wh);
+  transition:border-color .2s,box-shadow .2s;
+  outline:none;-webkit-appearance:none;appearance:none;
+  min-height:var(--tap);
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--g6);
+  box-shadow:0 0 0 3px rgba(22,163,74,.12);
+}
+input::placeholder,textarea::placeholder{color:var(--s3);font-size:14px}
+input[readonly]{background:var(--s1);color:var(--s5);cursor:not-allowed}
+select{
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:42px;
+}
+textarea{resize:vertical;min-height:90px;line-height:1.6;font-size:15px;min-height:auto}
+input.autofilled{background:#f0fdf4;border-color:var(--g5);color:var(--g7);font-weight:600}
+/* Desktop: slightly compact */
+@media(min-width:769px){
+  input[type=text],input[type=email],input[type=tel],
+  input[type=number],input[type=date],input[type=password],select{
+    font-size:14px;padding:11px 13px;min-height:42px;
+  }
+  input::placeholder{font-size:13px}
+  textarea{font-size:14px}
+}
+
+/* ── GRIDS ── */
+.g2,.g3,.g4{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:500px){.g2{grid-template-columns:1fr 1fr}}
+@media(min-width:600px){.g3{grid-template-columns:1fr 1fr}.g4{grid-template-columns:1fr 1fr}}
+@media(min-width:769px){.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:1fr 1fr 1fr 1fr}}
+
+/* ── YES / NO BUTTONS ── */
+.yn{display:flex;gap:10px}
+.yb{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 10px;
+  border:1.5px solid var(--s2);border-radius:var(--rsm);
+  cursor:pointer;font-size:15px;font-weight:700;color:var(--s5);
+  background:var(--wh);transition:all .15s;user-select:none;
+  min-height:var(--tap);
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.yb input[type=radio]{display:none}
+.yb .dot{width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.3;flex-shrink:0}
+.yb:active{transform:scale(.98)}
+.yb.yes{border-color:var(--g6);background:var(--g0);color:var(--g7)}
+.yb.yes .dot{opacity:1}
+.yb.no{border-color:var(--rd);background:var(--rd0);color:var(--rd)}
+.yb.no .dot{opacity:1}
+@media(min-width:769px){
+  .yb{font-size:13px;padding:10px 14px;min-height:42px}
+  .yb:hover{border-color:var(--g6);color:var(--g7);background:var(--g0)}
+}
+
+/* ── NOTES / WARNINGS ── */
+.note,.warn,.info-note{
+  border-radius:0 var(--rxs) var(--rxs) 0;
+  padding:10px 13px;font-size:12px;line-height:1.7;margin-bottom:14px;
+}
+.note{background:var(--bl0);border-left:3px solid var(--bl);color:var(--s7)}
+.warn{background:var(--am0);border-left:3px solid var(--am);color:#78350f}
+.info-note{background:#faf5ff;border-left:3px solid #8b5cf6;color:#4c1d95}
+@media(min-width:540px){.note,.warn,.info-note{font-size:13px;margin-bottom:16px}}
+
+/* ── DIVIDER ── */
+.div{border:none;border-top:1px solid var(--s2);margin:18px 0}
+@media(min-width:540px){.div{margin:22px 0}}
+
+/* ── FILE UPLOAD ── */
+.ar{display:flex;gap:8px;align-items:flex-start}
+.uw{flex:1;min-width:0}
+.ul{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 13px;
+  border:1.5px dashed var(--s3);border-radius:var(--rsm);
+  cursor:pointer;color:var(--s5);background:var(--s0);
+  transition:all .2s;min-height:54px;
+  -webkit-tap-highlight-color:transparent;
+}
+.ul:active{border-color:var(--g6);color:var(--g7);background:var(--g0)}
+@media(min-width:769px){.ul:hover{border-color:var(--g6);color:var(--g7);background:var(--g0)}}
+.ul input[type=file]{display:none}
+.ui{font-size:20px;flex-shrink:0}
+.ut strong{display:block;font-size:12px;font-weight:600;color:var(--s7)}
+.ut span{font-size:11px;color:var(--s4)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.chip{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 10px;
+  background:var(--g1);border:1px solid var(--g5);
+  border-radius:99px;font-size:11px;color:var(--g7);max-width:100%;
+}
+.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px}
+.chipx{cursor:pointer;color:var(--s4);font-size:16px;flex-shrink:0;line-height:1;padding:2px;min-width:24px;text-align:center}
+.chipx:active{color:var(--rd)}
+.rb{flex-shrink:0}
+.rt{
+  width:60px;min-height:54px;
+  background:var(--s0);border:1.5px dashed var(--s2);
+  border-radius:var(--rsm);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;cursor:pointer;
+  padding:5px 3px;text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .2s;
+}
+.rt .ri{font-size:18px;display:block}
+.rt small{font-size:9px;color:var(--s4);margin-top:2px;font-weight:600;text-align:center}
+.rt:active{border-color:var(--g6);background:var(--g0)}
+@media(min-width:540px){.rt{width:70px}}
+@media(min-width:769px){.rt:hover{border-color:var(--g6);background:var(--g0)}}
+
+/* ── AGREE BLOCK ── */
+.agree-wrap{
+  background:linear-gradient(135deg,#fef9ec,var(--am0));
+  border:1.5px solid var(--am1);border-radius:var(--rmd);
+  padding:14px;margin-bottom:14px;
+}
+.agree-title{font-size:13px;font-weight:700;color:#78350f;margin-bottom:8px}
+.agree-text{font-size:12px;color:#92400e;line-height:1.8;margin-bottom:12px}
+.agree-check{display:flex;align-items:flex-start;gap:12px;cursor:pointer}
+.agree-check input[type=checkbox]{
+  width:24px;height:24px;flex-shrink:0;margin-top:1px;
+  accent-color:var(--g6);cursor:pointer;
+}
+.agree-check span{font-size:13px;font-weight:600;color:var(--s7);line-height:1.5}
+@media(min-width:540px){
+  .agree-wrap{padding:18px}
+  .agree-check input[type=checkbox]{width:18px;height:18px}
+  .agree-check span{font-size:12px}
+}
+
+/* ── STRING SECTIONS ── */
+.sb{display:none}
+.sb.show{display:block}
+
+/* ── STICKY SUBMIT BUTTON ── */
+
+.sbtn{
+  width:100%;padding:16px;
+  background:linear-gradient(135deg,var(--g9),var(--g7));
+  color:#fff;border:none;border-radius:var(--rmd);
+  font-family:var(--font);
+  font-size:16px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 4px 24px rgba(22,101,52,.4);
+  transition:all .2s;
+  min-height:56px;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  letter-spacing:.2px;
+  margin-bottom:calc(24px + env(safe-area-inset-bottom, 16px));
+}
+.sbtn:active{transform:scale(.99);opacity:.9}
+.sbtn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+@media(min-width:769px){
+  .sbtn{font-size:15px;min-height:52px}
+  .sbtn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 28px rgba(22,101,52,.4)}
+}
+
+/* ── MODAL ── slides up on mobile ── */
+.mbg{
+  display:none;position:fixed;inset:0;
+  background:rgba(15,23,42,.6);backdrop-filter:blur(4px);
+  z-index:500;align-items:flex-end;justify-content:center;padding:0;
+}
+.mbg.open{display:flex}
+.mbox{
+  background:var(--wh);
+  border-radius:20px 20px 0 0;
+  padding:20px 18px 32px;
+  width:100%;max-height:90vh;overflow-y:auto;
+  position:relative;box-shadow:var(--sh-lg);
+  animation:slideUp .25s ease;
+}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+@media(min-width:600px){
+  .mbg{align-items:center;padding:16px}
+  .mbox{border-radius:18px;max-width:480px;padding:22px;animation:none}
+}
+.mclose{
+  position:absolute;top:14px;right:16px;
+  background:var(--s1);border:none;border-radius:50%;
+  width:34px;height:34px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--s5);
+  -webkit-tap-highlight-color:transparent;
+}
+.mclose:active{background:var(--rd0);color:var(--rd)}
+.mtitle{font-size:14px;font-weight:700;color:var(--g9);margin-bottom:12px;padding-right:38px}
+.mdesc{font-size:12px;color:var(--s7);margin-top:10px;line-height:1.7}
+
+/* ── UPLOAD OVERLAY ── */
+.uov{
+  display:none;position:fixed;inset:0;
+  background:rgba(15,23,42,.78);backdrop-filter:blur(6px);
+  z-index:600;align-items:center;justify-content:center;padding:16px;
+}
+.uov.open{display:flex}
+.ubox{
+  background:var(--wh);border-radius:18px;
+  padding:28px 20px;width:100%;max-width:360px;
+  text-align:center;box-shadow:var(--sh-lg);
+}
+.ubox h3{font-size:15px;font-weight:700;color:var(--g9);margin-bottom:6px}
+.ubox p{font-size:12px;color:var(--s5);margin-bottom:16px;line-height:1.6}
+.uspinner{
+  width:44px;height:44px;
+  border:4px solid var(--g1);border-top-color:var(--g6);
+  border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.uprb{height:7px;background:var(--s2);border-radius:99px;overflow:hidden;margin-bottom:7px}
+.uprf{height:100%;background:linear-gradient(90deg,var(--g6),var(--g5));border-radius:99px;transition:width .3s;width:0%}
+.ust{font-size:12px;color:var(--s5);font-weight:500;min-height:18px}
+.usub{font-size:11px;color:var(--s4);min-height:16px;margin-top:3px}
+
+/* ── SUCCESS SCREEN ── */
+#suc{display:none;margin-top:0}
+#suc.show{display:block}
+.suc-card{background:var(--wh);border:1px solid var(--s2);border-radius:20px;box-shadow:var(--sh-lg);overflow:hidden}
+.suc-banner{background:linear-gradient(135deg,var(--g9),var(--g7) 60%,var(--g6));padding:32px 20px 28px;text-align:center}
+.suc-check{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.suc-check svg{width:30px;height:30px}
+.suc-banner h2{font-size:20px;font-weight:800;color:#fff;margin-bottom:6px}
+.suc-banner p{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;max-width:280px;margin:0 auto}
+.suc-body{padding:20px 16px 28px}
+.suc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:380px){.suc-grid{grid-template-columns:1fr}}
+.ss-stat{background:var(--g0);border:1px solid var(--g1);border-radius:10px;padding:12px;text-align:center}
+.ss-icon{font-size:18px;margin-bottom:4px}
+.ss-val{font-size:17px;font-weight:800;color:var(--g7)}
+.ss-lbl{font-size:10px;color:var(--s5);margin-top:3px;font-weight:500}
+.suc-ref{background:var(--s0);border:1px solid var(--s2);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.sr-icon{font-size:20px;flex-shrink:0}
+.sr-text strong{display:block;font-size:12px;font-weight:700;color:var(--s7);margin-bottom:2px}
+.sr-text span{font-size:11px;color:var(--s5)}
+.sr-id{margin-left:auto;flex-shrink:0;font-size:10px;font-weight:700;background:var(--g1);color:var(--g7);padding:3px 9px;border-radius:99px;border:1px solid var(--g5)}
+.sac{display:flex;gap:10px;flex-direction:column}
+@media(min-width:480px){.sac{flex-direction:row}}
+.abtn{flex:1;padding:13px 16px;background:var(--wh);color:var(--g7);border:1.5px solid var(--g6);border-radius:var(--rsm);font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;min-height:var(--tap)}
+.abtn:active{background:var(--g0)}
+.abtn.primary{background:linear-gradient(135deg,var(--g9),var(--g7));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(22,101,52,.3)}
+@media(min-width:540px){.suc-body{padding:24px 20px 28px}}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:80px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--s9);color:#fff;
+  padding:12px 20px;border-radius:99px;
+  font-size:13px;font-weight:600;
+  box-shadow:var(--sh-lg);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  z-index:999;white-space:nowrap;max-width:88vw;text-align:center;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(min-width:769px){.toast{bottom:24px}}
+
+/* ── CONFETTI ── */
+.cfw{position:fixed;inset:0;pointer-events:none;z-index:700;overflow:hidden}
+.cfp{position:absolute;width:9px;height:9px;top:-20px;opacity:0;animation:cffall linear forwards}
+@keyframes cffall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(110vh) rotate(720deg)}}
+
+/* ── MISC ── */
+.ft{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;margin-left:5px;vertical-align:middle}
+.ft-p{background:#dbeafe;color:#1e40af}
+.ft-d{background:#fef3c7;color:#92400e}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- Upload Overlay -->
+<div class="uov" id="uov">
+  <div class="ubox">
+    <div class="uspinner"></div>
+    <h3 id="uovTitle">Submitting Form...</h3>
+    <p id="uovDesc">Uploading files to Google Drive.<br>Please keep this window open.</p>
+    <div class="uprb"><div class="uprf" id="uprf"></div></div>
+    <div class="ust" id="ust">Preparing...</div>
+    <div class="usub" id="usub"></div>
+  </div>
+</div>
+
+<!-- Confetti -->
+<div class="cfw" id="cfw"></div>
+
+<!-- Reference Modal -->
+<div class="mbg" id="modal" onclick="if(event.target===this)closeRef()">
+  <div class="mbox">
+    <button class="mclose" onclick="closeRef()">✕</button>
+    <div class="mtitle" id="mtitle"></div>
+    <div id="mimg-wrap" style="display:none"></div>
+    <p class="mdesc" id="mdesc"></p>
+  </div>
+</div>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="logo">PP</div>
+    <div class="topbar-title">
+      <h1>PuREPower I&amp;C Forms (All Models)</h1>
+      <p>Installation &amp; Commissioning Checklist</p>
+    </div>
+    <span class="vpill">Select Model</span>
+  </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="pb-wrap">
+  <div class="pb-in">
+    <div class="pb-meta">
+      <span class="pb-lbl" id="pbl">Getting started...</span>
+      <span class="pb-pct" id="pbp">0%</span>
+    </div>
+    <div class="pb-track"><div class="pb-fill" id="pbf"></div></div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+<div id="fm">
+
+<!-- DB Status Banner -->
+<div class="db-banner" id="dbBanner">
+  <div class="db-dot" id="dbDot"></div>
+  <span id="dbText">Connected to Google Sheets</span>
+  <span class="db-badge" id="dbBadge">GSheets</span>
+</div>
+
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 1 — FORM DETAILS
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">📋</div>
+    <span class="ct">Form Details</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="field">
+      <label class="fl">Form Filled by <span class="req">*</span></label>
+      <select id="fb" onchange="hf()">
+        <option value="">— Select who is filling this form —</option>
+        <option value="pure">PuRE Team</option>
+        <option value="customer">Customer / Customer Electrician Name</option>
+        <option value="dealer">Dealer / Distributor</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- PuRE Team Details -->
+<div class="card hidden" id="sp">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">🏢</div>
+    <span class="ct">PuRE Team Details <span class="ft ft-p">PuRE Only</span></span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="g2">
+      <div class="field">
+        <label class="fl">PuRE Team Concern Name <span class="req">*</span></label>
+        <input type="text" id="pure_name" placeholder="Enter full name">
+      </div>
+      <div class="field">
+        <label class="fl">PuRE Team Email ID <span class="req">*</span></label>
+        <input type="email" id="pure_email" placeholder="name@purepower.com">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dealer Details -->
+<div class="card hidden" id="sd">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">🏪</div>
+    <span class="ct">Dealer / Distributor Details <span class="ft ft-d">Dealer Only</span></span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="g3">
+      <div class="field">
+        <label class="fl">Showroom Name <span class="req">*</span></label>
+        <input type="text" id="dealer_name" placeholder="Enter showroom name">
+      </div>
+      <div class="field">
+        <label class="fl">Dealer Code <span class="req">*</span></label>
+        <input type="text" id="dealer_code" placeholder="Enter dealer code">
+      </div>
+      <div class="field">
+        <label class="fl">Dealer Email ID <span class="req">*</span></label>
+        <input type="email" id="dealer_email" placeholder="email@dealer.com">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 2 — CUSTOMER DETAILS
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">👤</div>
+    <span class="ct">Customer Details</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="g2">
+      <div class="field">
+        <label class="fl">Customer Name <span class="req">*</span></label>
+        <input type="text" id="cust_name" placeholder="Enter full name">
+      </div>
+      <div class="field">
+        <label class="fl">Customer Mobile Number <span class="req">*</span></label>
+        <input type="tel" id="cust_mobile" placeholder="+91 XXXXX XXXXX">
+      </div>
+    </div>
+    <div class="g2">
+      <div class="field">
+        <label class="fl">Customer Email ID</label>
+        <input type="email" id="cust_email" placeholder="email@example.com">
+      </div>
+      <div class="field">
+        <label class="fl">State</label>
+        <input type="text" id="cust_state" placeholder="Enter state">
+      </div>
+    </div>
+    <div class="g3">
+      <div class="field">
+        <label class="fl">City</label>
+        <input type="text" id="cust_city" placeholder="Enter city">
+      </div>
+      <div class="field">
+        <label class="fl">Pincode</label>
+        <input type="text" id="cust_pincode" placeholder="Enter pincode">
+      </div>
+    </div>
+    <div class="field">
+      <label class="fl">Full Installation Address</label>
+      <textarea id="cust_address" placeholder="Enter full installation address..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 3 — PRODUCT DETAILS
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">⚡</div>
+    <span class="ct">Product Details</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="g2">
+      <div class="field">
+        <label class="fl">PuREPower Model <span class="req">*</span></label>
+        <select id="prod_model" onchange="onModelChange()">
+          <option value="">— Select Model —</option>
+          <option value="3.0 Lite">PuREPower 3.0 Lite</option>
+          <option value="3.0/5.0">PuREPower 3.0 / 5.0</option>
+          <option value="12.0">PuREPower 12.0</option>
+          <option value="20.0">PuREPower 20.0</option>
+          <option value="30.0">PuREPower 30.0</option>
+          <option value="60.0">PuREPower 60.0</option>
+        </select>
+      </div>
+      <div class="field hidden" id="sub_model_wrap">
+        <label class="fl">Select Variant <span class="req">*</span></label>
+        <select id="sub_model" onchange="onSubModelChange()">
+          <option value="">— Select 3.0 or 5.0 —</option>
+          <option value="3.0">PuREPower 3.0</option>
+          <option value="5.0">PuREPower 5.0</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="fl">Model Number</label>
+        <input type="text" id="prod_model_num" placeholder="Enter model number">
+      </div>
+    </div>
+    <div class="g3">
+      <div class="field">
+        <label class="fl">Product Serial Number <span class="req">*</span></label>
+        <input type="text" id="prod_serial" placeholder="Enter serial number">
+      </div>
+      <div class="field">
+        <label class="fl">INV Code</label>
+        <input type="text" id="prod_inv" placeholder="Enter INV code">
+      </div>
+      <div class="field">
+        <label class="fl">Installation Start Date</label>
+        <input type="date" id="prod_date">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Model required notice -->
+<div id="model_required_notice" class="card" style="display:none">
+  <div class="cb" style="text-align:center;padding:24px">
+    <div style="font-size:32px;margin-bottom:10px">⚡</div>
+    <div style="font-size:14px;font-weight:700;color:var(--g7);margin-bottom:6px">Please select a PuREPower Model above</div>
+    <div style="font-size:12px;color:var(--s5)">The form fields will update based on the selected model</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 4 — SOLAR CONNECTION
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">🌞</div>
+    <span class="ct">Solar Connection</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="field">
+      <label class="fl">Have you connected Solar? <span class="req">*</span></label>
+      <select id="ss" onchange="hs()">
+        <option value="">— Select —</option>
+        <option value="yes">Yes — Solar is connected</option>
+        <option value="no">No — Solar not connected</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 5 — SOLAR DETAILS (conditional)
+══════════════════════════════════════════════════════════ -->
+<div class="card hidden" id="ssec">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">☀️</div>
+    <span class="ct">Solar Details</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="note" id="solar_offgrid_note">In OFF-GRID conditions only, at least 6 PV strings per phase — 2 strings must be properly connected to PV1, PV2, PV5, PV6, PV9, and PV10. (In this case, hide the input grid)</div>
+
+    <div class="field">
+      <label class="fl">Confirm that the single-line diagram (SLD) is made available before connecting the solar DC input to the PuREPower product &amp; attach the same <span class="req">*</span></label>
+      <div class="ar">
+        <div class="uw">
+          <label class="ul"><input type="file" id="f_sld" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*,.pdf" multiple onchange="ac(this,'c_sld')"><span class="ui">📎</span><div class="ut"><strong>Attach SLD Document</strong><span>JPG, PNG, Video or PDF</span></div></label>
+          <div class="chips" id="c_sld"></div>
+        </div>
+        <div class="rb"><a class="rt" onclick="rRef('sld','SLD Reference','Single Line Diagram required before connecting DC input')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Enter the PV module manufacturer name</label>
+      <input type="text" id="pv_mfr" placeholder="e.g. Waaree, Adani Solar">
+    </div>
+
+    <div class="field">
+      <label class="fl">Upload the solar module datasheet or the label picture from the back side of the solar panel</label>
+      <div class="ar">
+        <div class="uw">
+          <label class="ul"><input type="file" id="f_ds" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*,.pdf" multiple onchange="ac(this,'c_ds')"><span class="ui">📎</span><div class="ut"><strong>Attach Module Datasheet / Label Picture</strong><span>JPG, PNG, Video or PDF</span></div></label>
+          <div class="chips" id="c_ds"></div>
+        </div>
+        <div class="rb"><a class="rt" onclick="rRef('datasheet','Module Datasheet Reference','Upload solar module datasheet or label from back of panel')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="g4">
+      <div class="field"><label class="fl">Enter the module Maximum Power (Wp)</label><input type="number" id="pv_wp" placeholder="Wp"></div>
+      <div class="field"><label class="fl">Enter the PV module Voc (V)</label><input type="number" id="pv_voc" placeholder="V"></div>
+      <div class="field"><label class="fl">Enter the PV module Isc (A)</label><input type="number" id="pv_isc" placeholder="A"></div>
+      <div class="field"><label class="fl">Enter the PV module Imax (A)</label><input type="number" id="pv_imax" placeholder="A"></div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Use 1C x 6 sqmm copper cable for solar connections, and all cables are routed through conduits only</label>
+      <div class="yn" id="yn_c">
+        <label class="yb" onclick="py(this,'yn_c','yes')"><input type="radio" name="yc"><span class="dot"></span>Yes</label>
+        <label class="yb" onclick="py(this,'yn_c','no')"><input type="radio" name="yc"><span class="dot"></span>No</label>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <!-- 60.0 only: 12-string section -->
+    <!-- Dropdown strings section: 12.0(max 2), 20.0(max 3), 30.0(max 6), 60.0(max 12) -->
+    <div id="strings_12_section" class="hidden">
+      <div class="sh">⚡ Connected Strings</div>
+      <div class="field">
+        <label class="fl">Number of connected strings <span class="req">*</span></label>
+        <select id="stpills" onchange="ss2(parseInt(this.value)||0)">
+          <option value="0">— Select number of strings —</option>
+        </select>
+      </div>
+      <div id="stc"></div>
+      <div class="field" style="margin-top:16px">
+        <label class="fl">Enter Total Plant Capacity (W) <span class="fh" style="font-style:normal;display:inline">(one time — for all strings combined)</span></label>
+        <input type="number" id="total_plant_capacity" placeholder="W">
+      </div>
+    </div>
+
+    <!-- Parallel strings section: 3.0 Lite / 3.0 / 5.0 only -->
+    <div id="strings_parallel_section" class="hidden"></div>
+
+    <div class="div"></div>
+    <div class="sh">🗂️ DC Distribution Box &amp; Protection</div>
+
+    <div class="field">
+      <label class="fl">The installation of a DC Distribution Box (DCDB) is mandatory — Attach Picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_db" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_db')"><span class="ui">📎</span><div class="ut"><strong>Attach DCDB Picture</strong></div></label><div class="chips" id="c_db"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('dcdb','DCDB Reference','DC Distribution Box installation is mandatory')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm that each fuse rating is 32A &amp; attach the picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_fu" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_fu')"><span class="ui">📎</span><div class="ut"><strong>Attach Fuse Picture</strong></div></label><div class="chips" id="c_fu"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('fuse','Fuse 32A Reference','Each fuse rating must be 32A')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl" id="lbl_spd">Confirm that the 1000V DC Surge Protection Device (SPD) is installed &amp; attach the picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_sp" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_sp')"><span class="ui">📎</span><div class="ut"><strong>Attach SPD Picture</strong></div></label><div class="chips" id="c_sp"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('spd','SPD Reference','DC Surge Protection Device — rating varies by model')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm that the SPD is grounded to the earth pit &amp; attach the picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_se" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_se')"><span class="ui">📎</span><div class="ut"><strong>Attach SPD Earthing Picture</strong></div></label><div class="chips" id="c_se"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('spdEarth','SPD Earthing Reference','SPD must be grounded to earth pit')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">DC switch is optional for switching off individual strings</label>
+      <div class="yn" id="yn_dc"><label class="yb" onclick="py(this,'yn_dc','yes')"><input type="radio" name="ydc"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_dc','no')"><input type="radio" name="ydc"><span class="dot"></span>No</label></div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Before connecting the DC Lugs to PuREPower, all strings are checked and that both positive and negative connections are properly crimped</label>
+      <div class="yn" id="yn_cr"><label class="yb" onclick="py(this,'yn_cr','yes')"><input type="radio" name="ycr"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_cr','no')"><input type="radio" name="ycr"><span class="dot"></span>No</label></div>
+    </div>
+
+    <div class="field">
+      <label class="fl" id="lbl_polarity">Connect the strings as per the correct polarity and then switch on PuREPower 60.0</label>
+      <div class="yn" id="yn_pl"><label class="yb" onclick="py(this,'yn_pl','yes')"><input type="radio" name="ypl"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_pl','no')"><input type="radio" name="ypl"><span class="dot"></span>No</label></div>
+    </div>
+
+
+
+    <div class="field">
+      <label class="fl">Confirm whether the battery is charging through solar (Switched OFF Input AC Grid)</label>
+      <div class="yn" id="yn_bs"><label class="yb" onclick="py(this,'yn_bs','yes')"><input type="radio" name="ybs"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_bs','no')"><input type="radio" name="ybs"><span class="dot"></span>No</label></div>
+    </div>
+
+    <!-- Solar display picture — 20.0 only: single display picture -->
+    <div class="solar-disp-single hidden">
+      <div class="field">
+        <label class="fl">Upload the Display Picture (Solar side)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_sol_disp_s" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_sol_disp_s')"><span class="ui">📎</span><div class="ut"><strong>Attach Display Picture</strong><span>JPG, PNG or Video</span></div></label><div class="chips" id="c_sol_disp_s"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app','Display Reference','Upload Display Picture Solar side')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Solar display pictures — 30.0 only: P1/P2/P3 -->
+    <div class="solar-disp-p1p2p3 hidden">
+      <div class="field">
+        <label class="fl">Upload the P1 Display Picture (Solar side)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_sol_p1" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_sol_p1')"><span class="ui">📎</span><div class="ut"><strong>Attach P1 Display Picture</strong></div></label><div class="chips" id="c_sol_p1"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app','P1 Display Reference','P1 Display Picture Solar side')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the P2 Display Picture (Solar side)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_sol_p2" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_sol_p2')"><span class="ui">📎</span><div class="ut"><strong>Attach P2 Display Picture</strong></div></label><div class="chips" id="c_sol_p2"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app2','P2 Display Reference','P2 Display Picture Solar side')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the P3 Display Picture (Solar side)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_sol_p3" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_sol_p3')"><span class="ui">📎</span><div class="ut"><strong>Attach P3 Display Picture</strong></div></label><div class="chips" id="c_sol_p3"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app3','P3 Display Reference','P3 Display Picture Solar side')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="note">Note: The display shows PV input values by combining Strings 1 &amp; 2 for L1 PV Input, Strings 3 &amp; 4 for L2 PV Input, and Strings 5 &amp; 6 for L3 PV Input</div>
+    </div>
+
+    <!-- Solar display pictures — 60.0 only: P1-1/P1-2/P2-1/P2-2/P3-1/P3-2 -->
+    <div class="solar-disp-p1p2p3-60 hidden">
+      <div class="field">
+        <label class="fl">Upload the both P1-1 &amp; P1-2 Phase Display video (Solar side)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_p1" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_p1')"><span class="ui">📎</span><div class="ut"><strong>Attach P1-1 &amp; P1-2 Display Video</strong><span>JPG, PNG or Video</span></div></label><div class="chips" id="c_p1"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('appSop','P1 Display Reference','Upload P1-1 & P1-2 Phase Display video from Solar side')"><span class="ri">📹</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the both P2-1 &amp; P2-2 Phase Display video (Solar side)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_p2" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_p2')"><span class="ui">📎</span><div class="ut"><strong>Attach P2-1 &amp; P2-2 Display Video</strong><span>JPG, PNG or Video</span></div></label><div class="chips" id="c_p2"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('appSop2','P2 Display Reference','Upload P2-1 & P2-2 Phase Display video from Solar side')"><span class="ri">📹</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the both P3-1 &amp; P3-2 Phase Display video (Solar side)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_p3" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_p3')"><span class="ui">📎</span><div class="ut"><strong>Attach P3-1 &amp; P3-2 Display Video</strong><span>JPG, PNG or Video</span></div></label><div class="chips" id="c_p3"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('appSop3','P3 Display Reference','Upload P3-1 & P3-2 Phase Display video from Solar side')"><span class="ri">📹</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="note section-60only">The display shows PV input values by combining Strings 1,2,3&amp;4 for L1(P1) PV Input, Strings 5,6,7&amp;8 for L2(P2) PV Input, and Strings 9,10,11&amp;12 for L3(P3) PV Input</div>
+    </div>
+
+    <div class="div"></div>
+    <div class="sh">🔬 Solar Load Test</div>
+
+    <div class="field">
+      <label class="fl">Conduct the load test in off grid solar mode (Switched OFF Input AC Grid)</label>
+      <div class="yn" id="yn_lt"><label class="yb" onclick="py(this,'yn_lt','yes')"><input type="radio" name="ylt"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_lt','no')"><input type="radio" name="ylt"><span class="dot"></span>No</label></div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm that battery SOC is between 99% to 100% SOC prior to commencing the test — Attach Screenshot</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_sc" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_sc')"><span class="ui">📎</span><div class="ut"><strong>Attach SOC Screenshot</strong></div></label><div class="chips" id="c_sc"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('batSoc','Battery SOC Reference','Battery SOC must be 99-100% before solar test')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm that solar generation is at least 50% of the solar plant size (kW) — Attach Screenshot</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_s5" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_s5')"><span class="ui">📎</span><div class="ut"><strong>Attach Generation Screenshot</strong></div></label><div class="chips" id="c_s5"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('batSoc','Solar 50% Reference','Solar generation must be at least 50% of plant size')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm that all nominal loads are running in solar mode</label>
+      <div class="yn" id="yn_nl"><label class="yb" onclick="py(this,'yn_nl','yes')"><input type="radio" name="ynl"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_nl','no')"><input type="radio" name="ynl"><span class="dot"></span>No</label></div>
+    </div>
+
+    <!-- Single phase output kW — non-60.0 models -->
+    <div class="section-1phase hidden">
+      <div class="field"><label class="fl">Enter Output Power (kW)</label><input type="number" id="sol_kw_single" placeholder="kW"></div>
+    </div>
+    <!-- 3-phase output kW — 20.0 and 30.0 (R/Y/B Phase) -->
+    <div class="section-3ph-not60 hidden">
+      <div class="field"><label class="fl">Enter Output Power (kW)</label></div>
+      <div class="g3">
+        <div class="field"><label class="fl">R-Phase</label><input type="number" id="sol_kw_r" placeholder="kW"></div>
+        <div class="field"><label class="fl">Y-Phase</label><input type="number" id="sol_kw_y" placeholder="kW"></div>
+        <div class="field"><label class="fl">B-Phase</label><input type="number" id="sol_kw_b" placeholder="kW"></div>
+      </div>
+    </div>
+    <!-- 60.0 output kW — P1-1/P1-2/P2-1/P2-2/P3-1/P3-2 -->
+    <div class="section-60only hidden">
+      <div class="field"><label class="fl">Enter Output Power (kW)</label></div>
+      <div class="g3">
+        <div class="field"><label class="fl">R-Phase (P1-1)</label><input type="number" id="sol_kw_r1" placeholder="kW"></div>
+        <div class="field"><label class="fl">R-Phase (P1-2)</label><input type="number" id="sol_kw_r2" placeholder="kW"></div>
+        <div class="field"><label class="fl">Y-Phase (P2-1)</label><input type="number" id="sol_kw_y1" placeholder="kW"></div>
+      </div>
+      <div class="g3">
+        <div class="field"><label class="fl">Y-Phase (P2-2)</label><input type="number" id="sol_kw_y2" placeholder="kW"></div>
+        <div class="field"><label class="fl">B-Phase (P3-1)</label><input type="number" id="sol_kw_b1" placeholder="kW"></div>
+        <div class="field"><label class="fl">B-Phase (P3-2)</label><input type="number" id="sol_kw_b2" placeholder="kW"></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Attach the Video/Picture each Phase (Nominal loads running in solar mode)</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_nv" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_nv')"><span class="ui">📎</span><div class="ut"><strong>Attach Video or Picture</strong></div></label><div class="chips" id="c_nv"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('nomLoad','Nominal Load Reference','Attach video/picture of nominal loads running in solar mode')"><span class="ri">📹</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm that all full loads are running in solar mode</label>
+      <div class="yn" id="yn_fl"><label class="yb" onclick="py(this,'yn_fl','yes')"><input type="radio" name="yfl"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_fl','no')"><input type="radio" name="yfl"><span class="dot"></span>No</label></div>
+    </div>
+
+    <!-- Single phase output kVA — non-60.0 models -->
+    <div class="section-1phase hidden">
+      <div class="field"><label class="fl">Enter Output Power (kVA)</label><input type="number" id="sol_kva_single" placeholder="kVA"></div>
+    </div>
+    <!-- 3-phase output kVA — 20.0 and 30.0 (R/Y/B Phase) -->
+    <div class="section-3ph-not60 hidden">
+      <div class="field"><label class="fl">Enter Output Power (kVA)</label></div>
+      <div class="g3">
+        <div class="field"><label class="fl">R-Phase</label><input type="number" id="sol_kva_r" placeholder="kVA"></div>
+        <div class="field"><label class="fl">Y-Phase</label><input type="number" id="sol_kva_y" placeholder="kVA"></div>
+        <div class="field"><label class="fl">B-Phase</label><input type="number" id="sol_kva_b" placeholder="kVA"></div>
+      </div>
+    </div>
+    <!-- 60.0 output kVA — P1-1/P1-2/P2-1/P2-2/P3-1/P3-2 -->
+    <div class="section-60only hidden">
+      <div class="field"><label class="fl">Enter Output Power (kVA)</label></div>
+      <div class="g3">
+        <div class="field"><label class="fl">R-Phase (P1-1)</label><input type="number" id="sol_kva_r1" placeholder="kVA"></div>
+        <div class="field"><label class="fl">R-Phase (P1-2)</label><input type="number" id="sol_kva_r2" placeholder="kVA"></div>
+        <div class="field"><label class="fl">Y-Phase (P2-1)</label><input type="number" id="sol_kva_y1" placeholder="kVA"></div>
+      </div>
+      <div class="g3">
+        <div class="field"><label class="fl">Y-Phase (P2-2)</label><input type="number" id="sol_kva_y2" placeholder="kVA"></div>
+        <div class="field"><label class="fl">B-Phase (P3-1)</label><input type="number" id="sol_kva_b1" placeholder="kVA"></div>
+        <div class="field"><label class="fl">B-Phase (P3-2)</label><input type="number" id="sol_kva_b2" placeholder="kVA"></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Attach the Video/Picture (Full loads running in solar mode)</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_flv" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_flv')"><span class="ui">📎</span><div class="ut"><strong>Attach Video or Picture</strong></div></label><div class="chips" id="c_flv"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('fullLoad','Full Load Reference','Attach video/picture of full loads running in solar mode')"><span class="ri">📹</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm DC Earthing value (&lt;5 ohm) &amp; attach the picture</label>
+      <input type="number" id="dc_earth_ohm" placeholder="Enter value in Ohm" style="margin-bottom:8px">
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_de" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_de')"><span class="ui">📎</span><div class="ut"><strong>Attach DC Earthing Picture</strong></div></label><div class="chips" id="c_de"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('dcEarth','DC Earthing Reference','DC earthing must be connected to a separate earth pit, resistance below 5 ohms')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">DC earthing must be connected to a separate earth pit, and the measured resistance value should be below 5 ohms</label>
+      <div class="yn" id="yn_de"><label class="yb" onclick="py(this,'yn_de','yes')"><input type="radio" name="yde"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_de','no')"><input type="radio" name="yde"><span class="dot"></span>No</label></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 6 — SOLAR MONITORING (conditional)
+══════════════════════════════════════════════════════════ -->
+<div class="card hidden" id="smon">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">📱</div>
+    <span class="ct">Solar Monitoring — Solar of Things</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="note">Before connecting the dongle to PuREPower, please ensure your Wi-Fi frequency is set to 2.4 GHz. If only 5 GHz is available, contact your router provider to enable 2.4 GHz.</div>
+
+    <div class="field">
+      <label class="fl">Confirm that the Wi-Fi router is installed within 3 meters (&lt;10 feet) of the PuREPower unit — Attach Picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_wf" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_wf')"><span class="ui">📎</span><div class="ut"><strong>Attach Wi-Fi Router Picture</strong></div></label><div class="chips" id="c_wf"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('wifi','Wi-Fi Reference','Wi-Fi router must be within 3 meters of PuREPower')"><span class="ri">📹</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <!-- DONGLE: Single Solar of Things (3.0 Lite / 3.0 / 5.0 / 12.0) -->
+    <div class="smon-sot hidden">
+      <div class="field">
+        <label class="fl">Upload the Smart Solar of Things Dongle picture</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_d_sot" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_d_sot')"><span class="ui">📎</span><div class="ut"><strong>Attach Dongle Picture</strong></div></label><div class="chips" id="c_d_sot"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('dongle','Dongle Reference','Upload the correct dongle picture for your model')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the Solar of Things App Main Page</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_a_sot" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_a_sot')"><span class="ui">📎</span><div class="ut"><strong>Attach App Screenshot</strong></div></label><div class="chips" id="c_a_sot"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app','App Reference','Upload the correct app main page for your model')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DONGLE: Smart ESS (20.0 only) -->
+    <div class="smon-ess hidden">
+      <div class="field">
+        <label class="fl">Upload the Smart ESS Dongle picture</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_d_ess" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_d_ess')"><span class="ui">📎</span><div class="ut"><strong>Attach Smart ESS Dongle Picture</strong></div></label><div class="chips" id="c_d_ess"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('dongle','ESS Dongle Reference','Upload Smart ESS Dongle picture')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the Smart ESS App Main Page</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_a_ess" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_a_ess')"><span class="ui">📎</span><div class="ut"><strong>Attach Smart ESS App Screenshot</strong></div></label><div class="chips" id="c_a_ess"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app','ESS App Reference','Upload Smart ESS App Main Page')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DONGLE: P1 / P2 / P3 (30.0 and 60.0) -->
+    <div class="smon-p1p2p3 hidden">
+      <div class="field">
+        <label class="fl">Upload the Solar of Things Dongle picture P1 (R-Phase)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_d1a" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_d1a')"><span class="ui">📎</span><div class="ut"><strong>Attach Dongle P1 Picture</strong></div></label><div class="chips" id="c_d1a"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('dongle','Dongle P1 Reference','Solar of Things Dongle picture P1 R-Phase')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the Solar of Things Dongle picture P2 (Y-Phase)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_d2a" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_d2a')"><span class="ui">📎</span><div class="ut"><strong>Attach Dongle P2 Picture</strong></div></label><div class="chips" id="c_d2a"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('dongle','Dongle P2 Reference','Solar of Things Dongle picture P2 Y-Phase')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the Solar of Things Dongle picture P3 (B-Phase)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_d3a" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_d3a')"><span class="ui">📎</span><div class="ut"><strong>Attach Dongle P3 Picture</strong></div></label><div class="chips" id="c_d3a"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('dongle','Dongle P3 Reference','Solar of Things Dongle picture P3 B-Phase')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the Solar of Things App Main Page P1 (R-Phase)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_a1a" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_a1a')"><span class="ui">📎</span><div class="ut"><strong>App P1 Screenshot</strong></div></label><div class="chips" id="c_a1a"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app','App P1 Reference','Solar of Things App Main Page P1 R-Phase')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the Solar of Things App Main Page P2 (Y-Phase)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_a2a" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_a2a')"><span class="ui">📎</span><div class="ut"><strong>App P2 Screenshot</strong></div></label><div class="chips" id="c_a2a"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app','App P2 Reference','Solar of Things App Main Page P2 Y-Phase')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload the Solar of Things App Main Page P3 (B-Phase)</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_a3a" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_a3a')"><span class="ui">📎</span><div class="ut"><strong>App P3 Screenshot</strong></div></label><div class="chips" id="c_a3a"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('app','App P3 Reference','Solar of Things App Main Page P3 B-Phase')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="field"><label class="fl">Enter the login Email ID for Solar of Things App</label><input type="email" id="sot_email" placeholder="email@example.com"></div>
+      <div class="field"><label class="fl">Enter the login Password for Solar of Things App</label><input type="password" id="sot_pass" placeholder="••••••••"></div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Export option to be selected for all Phases (P1 P2 P3) only if the Net Meter is installed</label>
+      <div class="yn" id="yn_ex">
+        <label class="yb" onclick="py(this,'yn_ex','yes')"><input type="radio" name="yex"><span class="dot"></span>Yes — Grid Export Enable</label>
+        <label class="yb" onclick="py(this,'yn_ex','no')"><input type="radio" name="yex"><span class="dot"></span>No</label>
+      </div>
+      <div style="margin-top:10px">
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_expv" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_expv')"><span class="ui">📎</span><div class="ut"><strong>Attach Export Setting Video / Picture</strong></div></label><div class="chips" id="c_expv"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('export','Grid Export Reference','Export option for all phases if Net Meter is installed')"><span class="ri">📹</span><small>Reference</small></a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 7 — ELECTRICAL CHECKLIST
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">🔌</div>
+    <span class="ct">PuREPower Electrical Check List</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="field"><label class="fl">Before starting the installation, please read the manual carefully and prepare the required list of materials as per the site conditions</label><div class="yn" id="yn_e0"><label class="yb" onclick="py(this,'yn_e0','yes')"><input type="radio" name="ye0"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e0','no')"><input type="radio" name="ye0"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl" id="lbl_ac_cable">Use 50 sqmm x 4C core copper cable, and ensure all cables are routed through conduits</label><div class="yn" id="yn_e1"><label class="yb" onclick="py(this,'yn_e1','yes')"><input type="radio" name="ye1"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e1','no')"><input type="radio" name="ye1"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl">If Cu cable is used, then need to use ring type (50sqmm x 10mm Dia) Cu Lug only. If Al Cable is used, need to use the ring (50sqmm x 10mm Dia) type Bimetallic lug only</label><div class="yn" id="yn_e2"><label class="yb" onclick="py(this,'yn_e2','yes')"><input type="radio" name="ye2"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e2','no')"><input type="radio" name="ye2"><span class="dot"></span>No</label></div></div>
+
+    <div class="field">
+      <label class="fl">The installation of an AC Distribution Box (ACDB) is mandatory &amp; attach the picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_ac" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_ac')"><span class="ui">📎</span><div class="ut"><strong>Attach ACDB Picture</strong></div></label><div class="chips" id="c_ac"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('acdb','ACDB Reference','AC Distribution Box installation is mandatory')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field"><label class="fl" id="lbl_mcb">Confirm that the AC MCB used is rated 4P, 125A</label><div class="yn" id="yn_e4"><label class="yb" onclick="py(this,'yn_e4','yes')"><input type="radio" name="ye4"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e4','no')"><input type="radio" name="ye4"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl">Connect the RYBNE connections as per the correct phase sequence and there are no loose cable connections</label><div class="yn" id="yn_e5"><label class="yb" onclick="py(this,'yn_e5','yes')"><input type="radio" name="ye5"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e5','no')"><input type="radio" name="ye5"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl">Input neutral and output neutral are not connected at a single point. Confirm that the PuREPower input is connected to the grid input terminal, and the output neutral is connected to the load neutral point</label><div class="yn" id="yn_e6"><label class="yb" onclick="py(this,'yn_e6','yes')"><input type="radio" name="ye6"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e6','no')"><input type="radio" name="ye6"><span class="dot"></span>No</label></div></div>
+    <!-- Step 1: always shown — label changes per model -->
+    <div class="field">
+      <label class="fl" id="lbl_switch_step1">Switch ON the AC input breakers (MCB 1&amp;2) located on the back side panel of the PuREPower</label>
+      <div class="yn" id="yn_e7"><label class="yb" onclick="py(this,'yn_e7','yes')"><input type="radio" name="ye7"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e7','no')"><input type="radio" name="ye7"><span class="dot"></span>No</label></div>
+    </div>
+    <!-- Step 2: single-phase only (3.0Lite/3.0/5.0/12.0) — hidden for 3-phase models -->
+    <div id="div_switch_step2">
+      <div class="field">
+        <label class="fl" id="lbl_switch_step2">Switch on the AC switch. After 5 minutes orange light blinking continuously means battery getting charge through grid</label>
+        <div class="yn" id="yn_e7b"><label class="yb" onclick="py(this,'yn_e7b','yes')"><input type="radio" name="ye7b"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e7b','no')"><input type="radio" name="ye7b"><span class="dot"></span>No</label></div>
+      </div>
+    </div>
+    <!-- Phase sequence note: 20.0/30.0 only -->
+    <div id="div_phase_seq_note" class="hidden">
+      <div class="field">
+        <label class="fl">Note: If the input AC grid arrow is not displayed, interchange the phase sequence between Y phase and B phase</label>
+        <div class="yn" id="yn_e8"><label class="yb" onclick="py(this,'yn_e8','yes')"><input type="radio" name="ye8"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_e8','no')"><input type="radio" name="ye8"><span class="dot"></span>No</label></div>
+      </div>
+    </div>
+
+    <div class="div"></div>
+    <div class="sh">📊 I/P &amp; O/P Display Monitoring Check List</div>
+    <div class="note section-60only hidden">Readings per display: P1-1, P1-2 (R-Phase) | P2-1, P2-2 (Y-Phase) | P3-1, P3-2 (B-Phase)</div>
+    <div class="note section-3ph-not60 hidden">Readings shown per R Phase, Y Phase, B Phase</div>
+
+    <!-- Single phase monitoring — shown for all models except 60.0 -->
+    <!-- Single phase monitoring (3.0Lite/3.0/5.0/12.0) — exact fields from sheet -->
+    <div id="monitoring_single_phase" class="section-1phase hidden">
+      <div class="warn">Install a stabilizer if the voltage is fluctuating or not within the range of 210V to 250V.</div>
+      <div class="g2">
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Neutral) (V)</label><input type="number" id="sp_vpn" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Current (A)</label><input type="number" id="sp_ina_grid" placeholder="A"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Enter Input Frequency (Hz)</label><input type="number" id="sp_freq" placeholder="Hz"></div>
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Neutral) (V)</label><input type="number" id="sp_ovpn" placeholder="V"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Enter AC Output Frequency (Hz)</label><input type="number" id="sp_ofreq" placeholder="Hz"></div>
+        <div class="field"><label class="fl">Enter Output Power on Grid Mode (kW)</label><input type="number" id="sp_opw_grid" placeholder="kW"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Enter Load % on Grid Mode</label><input type="number" id="sp_load_grid" placeholder="%"></div>
+        <div class="field"><label class="fl">Enter Output Power on Battery Mode (kW)</label><input type="number" id="sp_opw_bat" placeholder="kW"></div>
+      </div>
+      <div class="field"><label class="fl">Enter Load % on Battery Mode</label><input type="number" id="sp_load_bat" placeholder="%"></div>
+      <div class="field">
+        <label class="fl">Upload the display photo of AC input</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_sp_acd" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_sp_acd')"><span class="ui">📎</span><div class="ut"><strong>Attach AC Display Photo</strong><span>JPG, PNG or Video</span></div></label><div class="chips" id="c_sp_acd"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('acDisplay','AC Input Display Reference','Upload display photo of AC input')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl">Upload a short video (less than 5 minutes) or a picture showing the full load test</label>
+        <div class="ar">
+          <div class="uw"><label class="ul"><input type="file" id="f_sp_lv" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_sp_lv')"><span class="ui">📎</span><div class="ut"><strong>Attach Load Test Video/Picture</strong><span>JPG, PNG or Video</span></div></label><div class="chips" id="c_sp_lv"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('fullLoad','Load Test Reference','Full load test video or picture')"><span class="ri">📹</span><small>Reference</small></a></div>
+        </div>
+      </div>
+      <div class="field"><label class="fl" id="lbl_sp_load_seg">Load segregation is mandatory if the total load exceeds the rated capacity</label><div class="yn" id="yn_sp_ls"><label class="yb" onclick="py(this,'yn_sp_ls','yes')"><input type="radio" name="yspls"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_sp_ls','no')"><input type="radio" name="yspls"><span class="dot"></span>No</label></div></div>
+    </div>
+
+    <!-- ── 3-phase monitoring: 20.0 and 30.0 — R/Y/B columns ── -->
+    <div class="section-3ph-not60 hidden">
+      <div class="g3">
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) R-Phase (V)</label><input type="number" id="el_vpp_r" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) Y-Phase (V)</label><input type="number" id="el_vpp_y" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) B-Phase (V)</label><input type="number" id="el_vpp_b" placeholder="V"></div>
+      </div>
+      <div class="g3">
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Neutral) R-Phase (V)</label><input type="number" id="el_vpn_r" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Neutral) Y-Phase (V)</label><input type="number" id="el_vpn_y" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Neutral) B-Phase (V)</label><input type="number" id="el_vpn_b" placeholder="V"></div>
+      </div>
+      <div class="warn">Install a stabilizer if the voltage is fluctuating or not within the range of 210V to 250V.</div>
+      <div class="g3">
+        <div class="field"><label class="fl">Enter Grid Input Current (A)</label><input type="number" id="el_ina_3ph" placeholder="A"></div>
+        <div class="field"><label class="fl">Enter Input Frequency (Hz)</label><input type="number" id="el_freq_3ph" placeholder="Hz"></div>
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Phase) (V)</label><input type="number" id="el_ovpp" placeholder="V"></div>
+      </div>
+      <div class="g3">
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Neutral) (V)</label><input type="number" id="el_ovpn" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter AC Output Frequency (Hz)</label><input type="number" id="el_ofreq_3ph" placeholder="Hz"></div>
+        <div class="field"><label class="fl">Enter Output Power (W) on Grid Mode</label><input type="number" id="el_opw_3ph" placeholder="W"></div>
+      </div>
+      <div class="field"><label class="fl">Enter Load % on each Phase</label><input type="number" id="el_load_3ph" placeholder="%"></div>
+      <div class="field"><label class="fl" id="lbl_load_seg">Load segregation is mandatory if the load exceeds the rated capacity on any single phase</label>
+        <div class="yn" id="yn_ls_3ph"><label class="yb" onclick="py(this,'yn_ls_3ph','yes')"><input type="radio" name="yls3"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_ls_3ph','no')"><input type="radio" name="yls3"><span class="dot"></span>No</label></div>
+      </div>
+    </div>
+
+    <!-- ── 60.0 monitoring: P1-1/P1-2/P2-1/P2-2/P3-1/P3-2 ── -->
+    <div class="section-60only hidden">
+      <div class="g2">
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) R-Phase P1-1 (V)</label><input type="number" id="el_vpp_r1" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) R-Phase P1-2 (V)</label><input type="number" id="el_vpp_r2" placeholder="V"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) Y-Phase P2-1 (V)</label><input type="number" id="el_vpp_y1" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) Y-Phase P2-2 (V)</label><input type="number" id="el_vpp_y2" placeholder="V"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) B-Phase P3-1 (V)</label><input type="number" id="el_vpp_b1" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Phase) B-Phase P3-2 (V)</label><input type="number" id="el_vpp_b2" placeholder="V"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Neutral) R-Phase (V)</label><input type="number" id="el_vpn_r1" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Neutral) Y-Phase (V)</label><input type="number" id="el_vpn_y1" placeholder="V"></div>
+      </div>
+      <div class="field"><label class="fl">Enter Grid Input Voltage (Phase to Neutral) B-Phase (V)</label><input type="number" id="el_vpn_b1" placeholder="V"></div>
+      <div class="warn">Install a stabilizer if the voltage is fluctuating or not within the range of 210V to 250V.</div>
+      <div class="g3">
+        <div class="field"><label class="fl">Enter Grid Input Current (A)</label><input type="number" id="el_ina" placeholder="A"></div>
+        <div class="field"><label class="fl">Enter AC Input Frequency (Hz)</label><input type="number" id="el_freq" placeholder="Hz"></div>
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Phase) (V)</label><input type="number" id="el_ovpp_60" placeholder="V"></div>
+      </div>
+      <div class="g3">
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Neutral) (V)</label><input type="number" id="el_ovpn_60" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter AC Output Frequency (Hz)</label><input type="number" id="el_ofreq" placeholder="Hz"></div>
+        <div class="field"><label class="fl">Enter Output Power (W) on Grid Mode</label><input type="number" id="el_opw" placeholder="W"></div>
+      </div>
+      <div class="field"><label class="fl">Enter Load % on each Phase</label><input type="number" id="el_load_pct" placeholder="%"></div>
+      <div class="field"><label class="fl" id="lbl_load_seg">Load segregation is mandatory if the load exceeds 17 kVA on any single phase</label>
+        <div class="yn" id="yn_ls"><label class="yb" onclick="py(this,'yn_ls','yes')"><input type="radio" name="yls"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_ls','no')"><input type="radio" name="yls"><span class="dot"></span>No</label></div>
+      </div>
+    </div>
+
+    <div class="div"></div>
+    <div class="sh">🔋 Battery Mode Load Test</div>
+
+    <div class="note">Ensure that both the Input AC Grid and Solar (if available) are switched OFF when conducting the load test on the PuREPower</div>
+
+    <!-- Single phase battery mode — 3.0Lite/3.0/5.0/12.0 -->
+    <div class="section-1phase hidden">
+      <div class="g2">
+        <div class="field"><label class="fl">Enter the Output Power (W) on Battery Mode</label><input type="number" id="bat_opw_single" placeholder="W"></div>
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Neutral) on Battery Mode (V)</label><input type="number" id="bat_vpn" placeholder="V"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Enter AC output frequency on Battery Mode (Hz)</label><input type="number" id="bat_freq" placeholder="Hz"></div>
+        <div class="field"><label class="fl">Enter Load % on Battery Mode</label><input type="number" id="bat_load_pct" placeholder="%"></div>
+      </div>
+    </div>
+
+    <!-- 3-phase battery mode — 20.0 and 30.0 (single output power, phase voltages) -->
+    <div class="section-3ph-not60 hidden">
+      <div class="g2">
+        <div class="field"><label class="fl">Enter the Output Power (W) on Battery Mode</label><input type="number" id="bat_opw_3ph" placeholder="W"></div>
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Phase) on Battery Mode (V)</label><input type="number" id="bat_vpp" placeholder="V"></div>
+      </div>
+      <div class="g3">
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Neutral) on Battery Mode (V)</label><input type="number" id="bat_vpn_3ph" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter AC output frequency on Battery Mode (Hz)</label><input type="number" id="bat_freq_3ph" placeholder="Hz"></div>
+        <div class="field"><label class="fl">Enter Load % on each Phase on Battery Mode</label><input type="number" id="bat_load_pct_3ph" placeholder="%"></div>
+      </div>
+    </div>
+
+    <!-- 60.0 only battery mode — P1-1/P2-1/P3-1 output power fields -->
+    <div class="section-60only hidden">
+      <div class="g3">
+        <div class="field"><label class="fl">Enter the Output Power (W) on Battery Mode — P1-1</label><input type="number" id="bat_opw_p11" placeholder="W"></div>
+        <div class="field"><label class="fl">Enter the Output Power (W) on Battery Mode — P2-1</label><input type="number" id="bat_opw_p21" placeholder="W"></div>
+        <div class="field"><label class="fl">Enter the Output Power (W) on Battery Mode — P3-1</label><input type="number" id="bat_opw_p31" placeholder="W"></div>
+      </div>
+      <div class="g3">
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Phase) on Battery Mode (V)</label><input type="number" id="bat_vpp_60" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter Output Voltage (Phase to Neutral) on Battery Mode (V)</label><input type="number" id="bat_vpn_60" placeholder="V"></div>
+        <div class="field"><label class="fl">Enter AC output frequency on Battery Mode (Hz)</label><input type="number" id="bat_freq_60" placeholder="Hz"></div>
+      </div>
+      <div class="field"><label class="fl">Enter Load % on each Phase on Battery Mode</label><input type="number" id="bat_load_pct_60" placeholder="%"></div>
+    </div>
+
+    <div class="field">
+      <label class="fl" id="lbl_bat_display">Upload the display photo of AC Output</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_ad" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_ad')"><span class="ui">📎</span><div class="ut"><strong>Attach AC Output Display Video/Photo</strong></div></label><div class="chips" id="c_ad"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('acDisplay','AC Output Reference','Upload display video of AC Output')"><span class="ri">📹</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm that battery SOC is between 99% to 100% SOC prior to commencing the test — Attach Screenshot/Video</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_bsc" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_bsc')"><span class="ui">📎</span><div class="ut"><strong>Attach Battery SOC Screenshot</strong></div></label><div class="chips" id="c_bsc"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('batSoc','Battery SOC Reference','Battery SOC must be 99-100% before battery load test')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Upload a short video (less than 5 minutes) or a picture showing the full load test on battery mode</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_bt" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_bt')"><span class="ui">📎</span><div class="ut"><strong>Attach Battery Load Test Video</strong></div></label><div class="chips" id="c_bt"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('batDg','Battery Load Test Reference','Upload short video of full load test on battery mode')"><span class="ri">📹</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Enter AC Earthing value (ohm) &amp; attach the picture</label>
+      <input type="number" id="ac_earth_ohm" placeholder="Enter value in Ohm" style="margin-bottom:8px">
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_ae" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_ae')"><span class="ui">📎</span><div class="ut"><strong>Attach AC Earthing Picture</strong></div></label><div class="chips" id="c_ae"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('acEarth','AC Earthing Reference','AC earthing must be below 5 ohms')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="warn">If the earth pit resistance is above 5 ohms, improve it by watering, adding salt/charcoal or chemical compounds.</div>
+
+    <div class="field">
+      <label class="fl">Confirm the input voltage between Neutral and Earth. It should not exceed 5V — Attach Picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_ne" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_ne')"><span class="ui">📎</span><div class="ut"><strong>Attach N-E Voltage Picture</strong></div></label><div class="chips" id="c_ne"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('ne5v','N-E Voltage Reference','Neutral to Earth voltage must not exceed 5V')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm and enter the leakage current on both the input and output neutral sides. If it exceeds 100mA, confirm the earthing and inspect the wiring. It is mandatory to install an ELCB on the input side of PuREPower</label>
+      <div class="yn" id="yn_elcb"><label class="yb" onclick="py(this,'yn_elcb','yes')"><input type="radio" name="yelcb"><span class="dot"></span>Yes — ELCB Installed</label><label class="yb" onclick="py(this,'yn_elcb','no')"><input type="radio" name="yelcb"><span class="dot"></span>No</label></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 8 — DG SYNCHRONIZATION
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">🔧</div>
+    <span class="ct">DG Synchronization Test (If Applicable)</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="note" id="lbl_dg_note">Confirm that the DG's maximum output power is at least 1.5 times higher than the PuREPower 60.0 rating. Example: For a 60 kW PuREPower, the DG capacity should be approximately 90 kW (≈100 kVA)</div>
+
+    <div class="g2">
+      <div class="field"><label class="fl">Enter the No of Diesel Generators</label><input type="number" id="dg_count" placeholder="Count"></div>
+      <div class="field">
+        <label class="fl">Enter Diesel Generator rating &amp; attach the picture</label>
+        <div class="ar" style="margin-top:6px">
+          <div class="uw"><label class="ul"><input type="file" id="f_dgr" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_dgr')"><span class="ui">📎</span><div class="ut"><strong>Attach DG Rating Picture</strong></div></label><div class="chips" id="c_dgr"></div></div>
+          <div class="rb"><a class="rt" onclick="rRef('dgRating','DG Rating Reference','Enter DG rating and attach rating plate picture')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Confirm the input voltage between Neutral and Earth. It should not exceed 5V — Attach Picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_dgne" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_dgne')"><span class="ui">📎</span><div class="ut"><strong>Attach DG N-E Picture</strong></div></label><div class="chips" id="c_dgne"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('dgNe','DG N-E Reference','DG Neutral to Earth voltage must not exceed 5V')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="fl">Enter DG Earthing value (ohm) &amp; attach the picture</label>
+      <input type="number" id="dg_earth_ohm" placeholder="Enter value in Ohm" style="margin-bottom:8px">
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_dge" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_dge')"><span class="ui">📎</span><div class="ut"><strong>Attach DG Earthing Picture</strong></div></label><div class="chips" id="c_dge"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('dgEarth','DG Earthing Reference','DG earth pit resistance must be below 5 ohms')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+
+    <div class="g3">
+      <div class="field"><label class="fl">Enter DG Output Voltage (Phase to Phase) R-Phase (V)</label><input type="number" id="dg_vpp_r" placeholder="V"></div>
+      <div class="field"><label class="fl">Enter DG Output Voltage (Phase to Phase) Y-Phase (V)</label><input type="number" id="dg_vpp_y" placeholder="V"></div>
+      <div class="field"><label class="fl">Enter DG Output Voltage (Phase to Phase) B-Phase (V)</label><input type="number" id="dg_vpp_b" placeholder="V"></div>
+    </div>
+    <div class="g3">
+      <div class="field"><label class="fl">Enter DG Output Voltage (Phase to Neutral) R-Phase (V)</label><input type="number" id="dg_vpn_r" placeholder="V"></div>
+      <div class="field"><label class="fl">Enter DG Output Voltage (Phase to Neutral) Y-Phase (V)</label><input type="number" id="dg_vpn_y" placeholder="V"></div>
+      <div class="field"><label class="fl">Enter DG Output Voltage (Phase to Neutral) B-Phase (V)</label><input type="number" id="dg_vpn_b" placeholder="V"></div>
+    </div>
+
+    <div class="warn">Install a stabilizer if voltage is fluctuating or not within 210V–250V range, or contact DG manufacturer. There must be no fluctuation at output of DG or at the input of PuREPower.</div>
+
+    <div class="field"><label class="fl">Switch off the grid input supply and check on the LED displays (P1, P2, P3) of PuREPower whether the grid input is connected on DG Mode</label><div class="yn" id="yn_dgm"><label class="yb" onclick="py(this,'yn_dgm','yes')"><input type="radio" name="ydgm"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_dgm','no')"><input type="radio" name="ydgm"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl">DG full load synchronized with PuREPower</label><div class="yn" id="yn_dgs"><label class="yb" onclick="py(this,'yn_dgs','yes')"><input type="radio" name="ydgs"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_dgs','no')"><input type="radio" name="ydgs"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl">Run the test for at least 15 minutes with the DG connected at full load</label><div class="yn" id="yn_dg15"><label class="yb" onclick="py(this,'yn_dg15','yes')"><input type="radio" name="ydg15"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_dg15','no')"><input type="radio" name="ydg15"><span class="dot"></span>No</label></div></div>
+
+    <div class="g3">
+      <div class="field"><label class="fl">Enter the Output Power (W) on DG Mode on each Phase</label><input type="number" id="dg_opw" placeholder="W"></div>
+      <div class="field"><label class="fl">Enter Load % on each Phase on DG Mode</label><input type="number" id="dg_load_pct" placeholder="%"></div>
+      <div class="field"><label class="fl">Enter AC output frequency on DG Mode (Hz)</label><input type="number" id="dg_freq" placeholder="Hz"></div>
+    </div>
+
+    <div class="field"><label class="fl">Confirm whether the battery is charging through diesel generator</label><div class="yn" id="yn_bdg"><label class="yb" onclick="py(this,'yn_bdg','yes')"><input type="radio" name="ybdg"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_bdg','no')"><input type="radio" name="ybdg"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl">Switch on the input grid supply</label><div class="yn" id="yn_go"><label class="yb" onclick="py(this,'yn_go','yes')"><input type="radio" name="ygo"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_go','no')"><input type="radio" name="ygo"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl">Confirm that PuREPower product automatically switch back to grid mode (when AC Grid Available)</label><div class="yn" id="yn_as"><label class="yb" onclick="py(this,'yn_as','yes')"><input type="radio" name="yas"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_as','no')"><input type="radio" name="yas"><span class="dot"></span>No</label></div></div>
+    <div class="field"><label class="fl">Confirm that all loads are running smoothly once back on the grid mode</label><div class="yn" id="yn_lg"><label class="yb" onclick="py(this,'yn_lg','yes')"><input type="radio" name="ylg"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_lg','no')"><input type="radio" name="ylg"><span class="dot"></span>No</label></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 9 — BATTERY DETAILS (Stack 1 + Stack 2)
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">🔋</div>
+    <span class="ct">PuREPower Battery Details</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="note">Ensure Wi-Fi router is within 3 meters and set to 2.4 GHz before connecting dongle.</div>
+    <div class="field">
+      <label class="fl">Confirm that the Wi-Fi router is installed within 3 meters (&lt;10 feet) of the PuREPower unit — Attach Picture</label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_wf2" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_wf2')"><span class="ui">📎</span><div class="ut"><strong>Attach Wi-Fi Router Picture</strong></div></label><div class="chips" id="c_wf2"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('wifi','Wi-Fi Router Reference','Wi-Fi router must be within 3 meters for BMS connectivity')"><span class="ri">📹</span><small>Reference</small></a></div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="field"><label class="fl">Enter the login Email ID for PURE BMS App</label><input type="email" id="bms_email" placeholder="email@example.com"></div>
+      <div class="field"><label class="fl">Enter the login Password for PURE BMS App</label><input type="password" id="bms_pass" placeholder="••••••••"></div>
+    </div>
+
+    <!-- Stack 1 -->
+    <div id="bc_s1"></div>
+    <!-- Stack 2 -->
+    <div id="bc_s2"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 10 — MANDATORY PHOTOGRAPHS
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">📸</div>
+    <span class="ct">Mandatory Photographs</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="field">
+      <label class="fl">Upload PuREPower installation photo <span class="req">*</span></label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_ip" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_ip')"><span class="ui">📎</span><div class="ut"><strong>Attach Installation Photo</strong><span>Mandatory</span></div></label><div class="chips" id="c_ip"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('install','Installation Photo Reference','Upload complete PuREPower installation photo')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="fl">Upload PuREPower Label <span class="req">*</span></label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_lp" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,'c_lp')"><span class="ui">📎</span><div class="ut"><strong>Attach Label Photo</strong><span>Mandatory</span></div></label><div class="chips" id="c_lp"></div></div>
+        <div class="rb"><a class="rt" onclick="rRef('label','Label Photo Reference','Upload PuREPower product label photo')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 11 — INSTALLER DETAILS
+══════════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="ch" onclick="tog(this)">
+    <div class="ci">🪪</div>
+    <span class="ct">Installer Details</span>
+    <span class="cv open">▾</span>
+  </div>
+  <div class="cb">
+    <div class="g2">
+      <div class="field"><label class="fl">Installation Done By (Channel Partner Firm Name)</label><input type="text" id="inst_firm" placeholder="Enter firm name"></div>
+      <div class="field"><label class="fl">Electrician Name</label><input type="text" id="inst_name" placeholder="Enter full name"></div>
+    </div>
+    <div class="g2">
+      <div class="field"><label class="fl">Electrician Mobile Number</label><input type="tel" id="inst_mobile" placeholder="+91 XXXXX XXXXX"></div>
+      <div class="field"><label class="fl">Electrician Email</label><input type="email" id="inst_email" placeholder="email@example.com"></div>
+    </div>
+    <div class="field"><label class="fl">Enter Date of Commissioning</label><input type="date" id="inst_date"></div>
+    <div class="field">
+      <label class="fl">If Solar is Connected — Net Meter is Installed</label>
+      <div class="yn" id="yn_nm"><label class="yb" onclick="py(this,'yn_nm','yes')"><input type="radio" name="ynm"><span class="dot"></span>Yes</label><label class="yb" onclick="py(this,'yn_nm','no')"><input type="radio" name="ynm"><span class="dot"></span>No</label></div>
+    </div>
+
+    <!-- CAN Fault Resolution -->
+    <div class="div"></div>
+    <div class="warn">
+      <strong>CAN Fault Resolution:</strong> If a CAN fault (80) occurs, please restart the system. If the fault is frequent, install an AVR for stabilization.
+    </div>
+
+    <!-- Agree Block -->
+    <div class="agree-wrap">
+      <div class="agree-title">📋 Agreement — All I&amp;C Activities</div>
+      <div class="agree-text">All I&amp;C activities have been completed successfully and the system is in good working condition at your premises. If a Wi-Fi router is not available, please ensure it is installed ASAP (As Soon As Possible) same day — otherwise, the warranty will become null and void. Kindly note that troubleshooting or firmware upgrades require Wi-Fi connectivity to the PuREPower system remotely.</div>
+      <label class="agree-check">
+        <input type="checkbox" id="agree_check" onchange="pg()">
+        <span>I agree to the above terms and confirm that all I&amp;C activities have been completed successfully. <span class="req">*</span></span>
+      </label>
+    </div>
+
+    <div class="field"><label class="fl">Remarks</label><textarea id="inst_remarks" placeholder="Any additional remarks..."></textarea></div>
+
+    <!-- Customer Signature -->
+    <div class="field">
+      <label class="fl">Customer Signature <span class="req">*</span></label>
+      <div class="ar">
+        <div class="uw"><label class="ul"><input type="file" id="f_csig" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*,.pdf" multiple onchange="ac(this,'c_csig')"><span class="ui">✍️</span><div class="ut"><strong>Attach Customer Signature</strong><span>Mandatory</span></div></label><div class="chips" id="c_csig"></div></div>
+      </div>
+    </div>
+
+    <div class="warn" style="margin-bottom:0">✅ All I&amp;C activities completed successfully.</div>
+  </div>
+</div>
+
+<button class="sbtn" id="submitBtn" onclick="sub()">Submit I&amp;C Form</button>
+
+</div><!-- end #fm -->
+
+<!-- ══════════════════════════════════════════════════════════
+     SUCCESS SCREEN
+══════════════════════════════════════════════════════════ -->
+<div id="suc">
+  <div class="suc-card">
+    <div class="suc-banner">
+      <div class="suc-check">
+        <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="19" cy="19" r="18" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+          <path d="M11 19.5L16.5 25L27 14" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>Form Submitted Successfully!</h2>
+      <p>All files uploaded to Google Drive. Data saved to Google Sheets.</p>
+    </div>
+    <div class="suc-body">
+      <div class="suc-grid">
+        <div class="ss-stat"><div class="ss-icon">📋</div><div class="ss-val" id="sucFields">—</div><div class="ss-lbl">Fields Filled</div></div>
+        <div class="ss-stat"><div class="ss-icon">📎</div><div class="ss-val" id="sucFiles">—</div><div class="ss-lbl">Files Uploaded</div></div>
+        <div class="ss-stat"><div class="ss-icon">🕐</div><div class="ss-val" id="sucTime">—</div><div class="ss-lbl">Submitted At</div></div>
+      </div>
+      <div class="suc-ref">
+        <div class="sr-icon">👤</div>
+        <div class="sr-text"><strong id="sucName">—</strong><span id="sucDetail">—</span></div>
+        <div class="sr-id" id="sucRef">—</div>
+      </div>
+      <div class="sac">
+        <button class="abtn" onclick="rst()">📝 Submit Another</button>
+        <button class="abtn primary" onclick="window.print()">🖨️ Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- end .main -->
+
+<div class="toast" id="tst"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     DATA LAYER — swap config to switch GSheets ↔ SQL
+══════════════════════════════════════════════════════════ -->
+<script>
+// ════════════════════════════════════════════════════════════
+//  ██████╗ ██████╗ ███╗   ██╗███████╗██╗ ██████╗
+//  CONFIG BLOCK — THIS IS THE ONLY THING YOU CHANGE
+//  TO SWITCH FROM GSHEET → SQL OR ENABLE BOTH
+// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  MODEL CONFIG — built from all 6 Google Sheet tabs
+//  Strings type: parallel=single mppt, 2str/3str/6str/12str=fixed count
+//  Phase: single=single phase, three=3-phase
+//  Dongle: sot=Solar of Things, ess=Smart ESS, p1p2p3=3 separate dongles
+// ═══════════════════════════════════════════════════════════
+var MODELS = {
+  "3.0 Lite": {
+    name:"PuREPower 3.0 Lite", phase:"single", spd:"600V",
+    acMCB:"2P, 32A", acCable:"6 sqmm x 1C core copper cable",
+    stringWatts:5000, imax:18, strings:"parallel",
+    batteries:1, batteryStacks:1, batModePerBat:false,
+    displayType:"lcd", dongle:"sot",
+    offGridNote:"",
+    solarDisplayPic:"none",
+    loadSegNote:"Load segregation is mandatory if the total load exceeds 1.8 kVA for PuREPower 3.0 Lite",
+    switchStep1:"Switch ON the DC MCB and the PuREPower display ON/OFF Switch. The LCD and Power LED indicator will be green lighted.",
+    switchStep2:"Switch on the AC switch. After 5 minutes orange light blinking continuously means battery getting charge through grid",
+    dgNote:"For a 3 kW PuREPower 3.0 Lite, the DG capacity should be approximately 4.5 kW (approx 7.5 kVA)",
+    polarity:"Connect the strings as per the correct polarity and then switch on PuREPower 3.0 Lite",
+    batDisplayLabel:"Upload the display photo of AC input",
+    phaseSeqNote:false,
+    refs:{
+      spd:"ref-spd.pdf",              // 600V SPD picture
+      spdEarth:"ref-spd.pdf",         // SPD earthing — same image
+      mcb:"ref-acdb.jpg",             // 2P 32A MCB
+      acdb:"ref-acdb.jpg",            // ACDB picture
+      dongle:"ref-dongle-p1.jpg",     // Solar of Things dongle
+      dongleVideo:"ref-dongle-p1.jpg",// Dongle reference
+      app:"ref-app-p1.jpg",           // SoT App Main Page picture
+      appSop:"ref-app-p1.jpg",        // SoT App SOP
+      switchOn:"ref-acdb.jpg",        // Switch ON reference
+      install:"ref-install.jpg",      // Installation photo
+      label:"ref-label.jpg",          // Label photo
+      bms:"ref-bat-bms.jpg",          // BMS screenshot
+      acDisplay:"ref-ac-display.jpg", // AC display photo
+      acEarth:"ref-ac-earth.jpg",     // AC earthing
+      dcEarth:"ref-dc-earth.jpg",     // DC earthing
+      ne5v:"ref-ne5v.jpg",            // N-E voltage
+      dgRating:"ref-dg-rating.jpeg",  // DG rating plate
+      dgEarth:"ref-dg-earth.jpg",     // DG earthing
+      dgNe:"ref-dg-ne.jpg",           // DG N-E voltage
+      dgMode:"ref-dg-mode.jpg",       // DG mode display
+      batDg:"ref-bat-dg.mp4",         // Battery/DG test video
+      wifi:"ref-wifi.jpg",            // Wi-Fi reference
+      batSoc:"ref-bat-soc.jpg",       // Battery SOC
+      fullLoad:"ref-full-load.jpg",   // Full load test
+      nomLoad:"ref-full-load.jpg",    // Nominal load test
+      dcdb:"ref-dcdb.pdf",            // DCDB
+      fuse:"ref-fuse.pdf",            // Fuse 32A
+      sld:"ref-sld.jpg",              // SLD
+      datasheet:"ref-datasheet.pdf",  // Module datasheet
+      export:"ref-bat-dg.mp4",        // Grid export video
+      loadPct:"ref-load-pct.pdf"      // Load % reference
+    }
+  },
+  "3.0": {
+    name:"PuREPower 3.0", phase:"single", spd:"600V",
+    acMCB:"2P, 32A", acCable:"6 sqmm x 1C core copper cable",
+    stringWatts:6500, imax:27, strings:"parallel",
+    batteries:1, batteryStacks:1, batModePerBat:false,
+    displayType:"lcd", dongle:"sot",
+    offGridNote:"",
+    solarDisplayPic:"none",
+    loadSegNote:"Load segregation is mandatory if the total load exceeds 2.5 kVA for PuREPower 3.0",
+    switchStep1:"Switch ON the DC MCB and the PuREPower display ON/OFF Switch. The LCD and Power LED indicator will be green lighted.",
+    switchStep2:"Switch on the AC switch. After 5 minutes orange light blinking continuously means battery getting charge through grid",
+    dgNote:"For a 3 kW PuREPower 3.0, the DG capacity should be approximately 4.5 kW (approx 7.5 kVA)",
+    polarity:"Connect the strings as per the correct polarity and then switch on PuREPower 3.0",
+    batDisplayLabel:"Upload the display photo of AC input",
+    phaseSeqNote:false,
+    refs:{
+      spd:"ref-spd.pdf", spdEarth:"ref-spd.pdf", mcb:"ref-acdb.jpg",
+      acdb:"ref-acdb.jpg", dongle:"ref-dongle-p1.jpg", dongleVideo:"ref-dongle-p1.jpg",
+      app:"ref-app-p1.jpg", appSop:"ref-app-p1.jpg", switchOn:"ref-acdb.jpg",
+      install:"ref-install.jpg", label:"ref-label.jpg", bms:"ref-bat-bms.jpg",
+      acDisplay:"ref-ac-display.jpg", acEarth:"ref-ac-earth.jpg", dcEarth:"ref-dc-earth.jpg",
+      ne5v:"ref-ne5v.jpg", dgRating:"ref-dg-rating.jpeg", dgEarth:"ref-dg-earth.jpg",
+      dgNe:"ref-dg-ne.jpg", dgMode:"ref-dg-mode.jpg", batDg:"ref-bat-dg.mp4",
+      wifi:"ref-wifi.jpg", batSoc:"ref-bat-soc.jpg", fullLoad:"ref-full-load.jpg",
+      nomLoad:"ref-full-load.jpg", dcdb:"ref-dcdb.pdf", fuse:"ref-fuse.pdf",
+      sld:"ref-sld.jpg", datasheet:"ref-datasheet.pdf", export:"ref-bat-dg.mp4",
+      loadPct:"ref-load-pct.pdf"
+    }
+  },
+  "5.0": {
+    name:"PuREPower 5.0", phase:"single", spd:"600V",
+    acMCB:"2P, 32A", acCable:"6 sqmm x 1C core copper cable",
+    stringWatts:6500, imax:27, strings:"parallel",
+    batteries:1, batteryStacks:1, batModePerBat:false,
+    displayType:"lcd", dongle:"sot",
+    offGridNote:"",
+    solarDisplayPic:"none",
+    loadSegNote:"Load segregation is mandatory if the total load exceeds 3.75 kVA for PuREPower 5.0",
+    switchStep1:"Switch ON the DC MCB and the PuREPower display ON/OFF Switch. The LCD and Power LED indicator will be green lighted.",
+    switchStep2:"Switch on the AC switch. After 5 minutes orange light blinking continuously means battery getting charge through grid",
+    dgNote:"For a 5 kW PuREPower 5.0, the DG capacity should be approximately 7.5 kW (approx 10 kVA)",
+    polarity:"Connect the strings as per the correct polarity and then switch on PuREPower 3.0/5.0",
+    batDisplayLabel:"Upload the display photo of AC input",
+    phaseSeqNote:false,
+    refs:{
+      spd:"ref-spd.pdf", spdEarth:"ref-spd.pdf", mcb:"ref-acdb.jpg",
+      acdb:"ref-acdb.jpg", dongle:"ref-dongle-p1.jpg", dongleVideo:"ref-dongle-p1.jpg",
+      app:"ref-app-p1.jpg", appSop:"ref-app-p1.jpg", switchOn:"ref-acdb.jpg",
+      install:"ref-install.jpg", label:"ref-label.jpg", bms:"ref-bat-bms.jpg",
+      acDisplay:"ref-ac-display.jpg", acEarth:"ref-ac-earth.jpg", dcEarth:"ref-dc-earth.jpg",
+      ne5v:"ref-ne5v.jpg", dgRating:"ref-dg-rating.jpeg", dgEarth:"ref-dg-earth.jpg",
+      dgNe:"ref-dg-ne.jpg", dgMode:"ref-dg-mode.jpg", batDg:"ref-bat-dg.mp4",
+      wifi:"ref-wifi.jpg", batSoc:"ref-bat-soc.jpg", fullLoad:"ref-full-load.jpg",
+      nomLoad:"ref-full-load.jpg", dcdb:"ref-dcdb.pdf", fuse:"ref-fuse.pdf",
+      sld:"ref-sld.jpg", datasheet:"ref-datasheet.pdf", export:"ref-bat-dg.mp4",
+      loadPct:"ref-load-pct.pdf"
+    }
+  },
+  "12.0": {
+    name:"PuREPower 12.0", phase:"single", spd:"600V",
+    acMCB:"2P, 63A", acCable:"6 sqmm x 1C core copper cable",
+    stringWatts:5500, imax:18, strings:"2str",
+    batteries:2, batteryStacks:1, batModePerBat:false,
+    displayType:"lcd", dongle:"sot",
+    offGridNote:"",
+    solarDisplayPic:"none",
+    loadSegNote:"Load segregation is mandatory if the total load exceeds 9 kVA for PuREPower 12.0",
+    switchStep1:"Switch ON the DC MCB and the PuREPower display ON/OFF Switch. The LCD and Power LED indicator will be green lighted.",
+    switchStep2:"Switch on the AC switch. After 5 minutes orange light blinking continuously means battery getting charge through grid",
+    dgNote:"For a 12 kW PuREPower 12.0, the DG capacity should be approximately 18 kW (approx 22.5 kVA)",
+    polarity:"Connect the strings as per the correct polarity and then switch on PuREPower 12.0",
+    batDisplayLabel:"Upload the display photo of AC input",
+    phaseSeqNote:false,
+    refs:{
+      spd:"ref-spd.pdf", spdEarth:"ref-spd.pdf", mcb:"ref-acdb.jpg",
+      acdb:"ref-acdb.jpg", dongle:"ref-dongle-p1.jpg", dongleVideo:"ref-dongle-p1.jpg",
+      app:"ref-app-p1.jpg", appSop:"ref-app-p1.jpg", switchOn:"ref-acdb.jpg",
+      install:"ref-install.jpg", label:"ref-label.jpg", bms:"ref-bat-bms.jpg",
+      acDisplay:"ref-ac-display.jpg", acEarth:"ref-ac-earth.jpg", dcEarth:"ref-dc-earth.jpg",
+      ne5v:"ref-ne5v.jpg", dgRating:"ref-dg-rating.jpeg", dgEarth:"ref-dg-earth.jpg",
+      dgNe:"ref-dg-ne.jpg", dgMode:"ref-dg-mode.jpg", batDg:"ref-bat-dg.mp4",
+      wifi:"ref-wifi.jpg", batSoc:"ref-bat-soc.jpg", fullLoad:"ref-full-load.jpg",
+      nomLoad:"ref-full-load.jpg", dcdb:"ref-dcdb.pdf", fuse:"ref-fuse.pdf",
+      sld:"ref-sld.jpg", datasheet:"ref-datasheet.pdf", export:"ref-bat-dg.mp4",
+      loadPct:"ref-load-pct.pdf"
+    }
+  },
+  "20.0": {
+    name:"PuREPower 20.0", phase:"three", spd:"600V",
+    acMCB:"4P, 63A", acCable:"6 sqmm x 4C core copper cable",
+    stringWatts:8500, imax:27, strings:"3str",
+    batteries:5, batteryStacks:1, batModePerBat:true,
+    displayType:"three", dongle:"ess",
+    offGridNote:"In OFF-GRID conditions only, all PV strings must be properly connected to PV1, PV2, and PV3",
+    solarDisplayPic:"single",
+    loadSegNote:"Load segregation is mandatory if the load exceeds 5 kVA on any single phase",
+    switchStep1:"Switch ON the AC input breaker located on the back side panel of the PuREPower",
+    switchStep2:"",
+    dgNote:"For a 20 kW PuREPower 20.0, the DG capacity should be approximately 30 kW (approx 37.5 kVA)",
+    polarity:"Connect the strings as per the correct polarity and then switch on PuREPower 20.0",
+    batDisplayLabel:"Upload the display photo of AC input",
+    phaseSeqNote:true,
+    refs:{
+      spd:"ref-spd.pdf",              // 600V SPD
+      spdEarth:"ref-spd.pdf",
+      mcb:"ref-acdb.jpg",             // 4P 63A MCB
+      acdb:"ref-acdb.jpg",
+      dongle:"ref-dongle-p1.jpg",     // Smart ESS Dongle picture
+      dongleVideo:"ref-dongle-p1.jpg",
+      app:"ref-app-p1.jpg",           // Smart ESS App picture
+      appSop:"ref-bat-dg.mp4",        // ESS App SOP video
+      switchOn:"ref-acdb.jpg",
+      install:"ref-install.jpg", label:"ref-label.jpg", bms:"ref-bat-bms.jpg",
+      acDisplay:"ref-ac-display.jpg", acEarth:"ref-ac-earth.jpg", dcEarth:"ref-dc-earth.jpg",
+      ne5v:"ref-ne5v.jpg", dgRating:"ref-dg-rating.jpeg", dgEarth:"ref-dg-earth.jpg",
+      dgNe:"ref-dg-ne.jpg", dgMode:"ref-dg-mode.jpg", batDg:"ref-bat-dg.mp4",
+      wifi:"ref-wifi.jpg", batSoc:"ref-bat-soc.jpg", fullLoad:"ref-full-load.jpg",
+      nomLoad:"ref-full-load.jpg", dcdb:"ref-dcdb.pdf", fuse:"ref-fuse.pdf",
+      sld:"ref-sld.jpg", datasheet:"ref-datasheet.pdf", export:"ref-bat-dg.mp4",
+      loadPct:"ref-load-pct.pdf"
+    }
+  },
+  "30.0": {
+    name:"PuREPower 30.0", phase:"three", spd:"1000V",
+    acMCB:"4P, 63A", acCable:"16 or 25 sqmm x 4C core copper cable",
+    stringWatts:5500, imax:18, strings:"6str",
+    batteries:7, batteryStacks:1, batModePerBat:true,
+    displayType:"p1p2p3", dongle:"p1p2p3",
+    offGridNote:"In OFF-GRID conditions only, all PV strings must be properly connected to PV1, PV2, and PV3",
+    solarDisplayPic:"p1p2p3",
+    loadSegNote:"Load segregation is mandatory if the load exceeds 8 kVA on any single phase",
+    switchStep1:"Switch ON the AC input breaker (MCB) located on the back side panel of the PuREPower",
+    switchStep2:"",
+    dgNote:"For a 30 kW PuREPower 30.0, the DG capacity should be approximately 45 kW (approx 56 kVA)",
+    polarity:"Connect the strings as per the correct polarity and then switch on PuREPower 30.0",
+    batDisplayLabel:"Upload the display photo of AC Output",
+    phaseSeqNote:true,
+    refs:{
+      spd:"ref-spd.pdf",              // 1000V SPD (use ref-spd.pdf — update if you have separate 1000V file)
+      spdEarth:"ref-spd.pdf",
+      mcb:"ref-acdb.jpg",             // 4P 63A MCB
+      acdb:"ref-acdb.jpg",
+      dongle:"ref-dongle-p1.jpg",     // P1 dongle picture
+      dongle2:"ref-dongle-p2.jpg",    // P2 dongle picture
+      dongle3:"ref-dongle-p3.jpg",    // P3 dongle picture
+      dongleVideo:"ref-dongle-p1.jpg",
+      app:"ref-app-p1.jpg",           // App P1 picture
+      app2:"ref-app-p2.jpg",          // App P2 picture
+      app3:"ref-app-p3.jpg",          // App P3 picture
+      appSop:"ref-app-sop-p1.mp4",    // SOP video P1
+      appSop2:"ref-app-sop-p2.mp4",   // SOP video P2
+      appSop3:"ref-app-sop-p3.mp4",   // SOP video P3
+      switchOn:"ref-acdb.jpg",
+      install:"ref-install.jpg", label:"ref-label.jpg", bms:"ref-bat-bms.jpg",
+      acDisplay:"ref-ac-display.jpg", acEarth:"ref-ac-earth.jpg", dcEarth:"ref-dc-earth.jpg",
+      ne5v:"ref-ne5v.jpg", dgRating:"ref-dg-rating.jpeg", dgEarth:"ref-dg-earth.jpg",
+      dgNe:"ref-dg-ne.jpg", dgMode:"ref-dg-mode.jpg", batDg:"ref-bat-dg.mp4",
+      wifi:"ref-wifi.jpg", batSoc:"ref-bat-soc.jpg", fullLoad:"ref-full-load.jpg",
+      nomLoad:"ref-full-load.jpg", dcdb:"ref-dcdb.pdf", fuse:"ref-fuse.pdf",
+      sld:"ref-sld.jpg", datasheet:"ref-datasheet.pdf", export:"ref-bat-dg.mp4",
+      loadPct:"ref-load-pct.pdf"
+    }
+  },
+  "60.0": {
+    name:"PuREPower 60.0", phase:"three", spd:"1000V",
+    acMCB:"4P, 125A", acCable:"50 sqmm x 4C core copper cable",
+    stringWatts:7500, imax:27, strings:"12str",
+    batteries:14, batteryStacks:2, batModePerBat:false,
+    displayType:"p1p2p3", dongle:"p1p2p3",
+    offGridNote:"In OFF-GRID conditions only, at least 6 PV strings per phase — 2 strings must be properly connected to PV1, PV2, PV5, PV6, PV9, and PV10. (In this case, hide the input grid)",
+    solarDisplayPic:"p1p2p3_60",
+    loadSegNote:"Load segregation is mandatory if the load exceeds 17 kVA on any single phase",
+    switchStep1:"Switch ON the AC input breakers (MCB 1&2) located on the back side panel of the PuREPower",
+    switchStep2:"",
+    dgNote:"For a 60 kW PuREPower 60.0, the DG capacity should be approximately 90 kW (approx 100 kVA)",
+    polarity:"Connect the strings as per the correct polarity and then switch on PuREPower 60.0",
+    batDisplayLabel:"Upload the display photo of AC Output",
+    phaseSeqNote:false,
+    refs:{
+      spd:"ref-spd.pdf",              // 1000V SPD
+      spdEarth:"ref-spd.pdf",
+      mcb:"ref-acdb.jpg",             // 4P 125A MCB
+      acdb:"ref-acdb.jpg",
+      dongle:"ref-dongle-p1.jpg",     // P1 dongle
+      dongle2:"ref-dongle-p2.jpg",    // P2 dongle
+      dongle3:"ref-dongle-p3.jpg",    // P3 dongle
+      dongleVideo:"ref-dongle-p1.jpg",
+      app:"ref-app-p1.jpg",           // App P1
+      app2:"ref-app-p2.jpg",          // App P2
+      app3:"ref-app-p3.jpg",          // App P3
+      appSop:"ref-app-sop-p1.mp4",    // SOP video P1
+      appSop2:"ref-app-sop-p2.mp4",   // SOP video P2
+      appSop3:"ref-app-sop-p3.mp4",   // SOP video P3
+      switchOn:"ref-acdb.jpg",
+      install:"ref-install.jpg", label:"ref-label.jpg", bms:"ref-bat-bms.jpg",
+      acDisplay:"ref-ac-display.jpg", acEarth:"ref-ac-earth.jpg", dcEarth:"ref-dc-earth.jpg",
+      ne5v:"ref-ne5v.jpg", dgRating:"ref-dg-rating.jpeg", dgEarth:"ref-dg-earth.jpg",
+      dgNe:"ref-dg-ne.jpg", dgMode:"ref-dg-mode.jpg", batDg:"ref-bat-dg.mp4",
+      wifi:"ref-wifi.jpg", batSoc:"ref-bat-soc.jpg", fullLoad:"ref-full-load.jpg",
+      nomLoad:"ref-full-load.jpg", dcdb:"ref-dcdb.pdf", fuse:"ref-fuse.pdf",
+      sld:"ref-sld.jpg", datasheet:"ref-datasheet.pdf", export:"ref-bat-dg.mp4",
+      loadPct:"ref-load-pct.pdf"
+    }
+  }
+};
+
+
+// Get the currently active model config
+function getModelCfg(){
+  var v = gv('prod_model');
+  if(v==='3.0/5.0') v = gv('sub_model') || '5.0';
+  return MODELS[v] || null;
+}
+
+// Called when model dropdown changes
+function onModelChange(){
+  var v=gv('prod_model');
+  document.getElementById('sub_model_wrap').classList.toggle('hidden', v!=='3.0/5.0');
+  if(v==='3.0/5.0'){
+    // Wait for sub-model selection
+    document.getElementById('sub_model').value='';
+  } else {
+    applyModelConfig();
+  }
+  pg();
+}
+
+function onSubModelChange(){
+  applyModelConfig();
+  pg();
+}
+
+function applyModelConfig(){
+  var m=getModelCfg();
+  if(!m) return;
+
+  // ── Topbar pill ───────────────────────────────────────────
+  var vp=document.querySelector('.vpill');
+  if(vp){ var pv=gv('prod_model')==='3.0/5.0'?gv('sub_model'):gv('prod_model'); vp.textContent='v'+pv; }
+
+  var el;
+  // ── SPD label ─────────────────────────────────────────────
+  el=document.getElementById('lbl_spd');
+  if(el) el.textContent='Confirm that the '+m.spd+' DC Surge Protection Device (SPD) is installed & attach the picture';
+
+  // ── AC MCB label ──────────────────────────────────────────
+  el=document.getElementById('lbl_mcb');
+  if(el) el.textContent='Confirm that the AC MCB used is rated '+m.acMCB;
+
+  // ── AC Cable label ────────────────────────────────────────
+  el=document.getElementById('lbl_ac_cable');
+  if(el) el.textContent='Use '+m.acCable+', and ensure all cables are routed through conduits';
+
+  // ── String watts / Imax labels ────────────────────────────
+  el=document.getElementById('lbl_string_watts');
+  if(el) el.textContent='Confirm that it did not exceed '+m.stringWatts+' watts per string';
+  el=document.getElementById('lbl_imax');
+  if(el) el.textContent='Confirm that Imax did not exceed '+m.imax+'A per string';
+
+  // ── Polarity / switch on label ────────────────────────────
+  el=document.getElementById('lbl_polarity');
+  if(el) el.textContent=m.polarity;
+
+  // ── OFF-GRID note ─────────────────────────────────────────
+  el=document.getElementById('solar_offgrid_note');
+  if(el){ el.style.display=m.offGridNote?'block':'none'; if(m.offGridNote) el.textContent=m.offGridNote; }
+
+  // ── Notes ─────────────────────────────────────────────────
+  el=document.getElementById('lbl_load_seg'); if(el) el.textContent=m.loadSegNote;
+  el=document.getElementById('lbl_sp_load_seg'); if(el) el.textContent=m.loadSegNote;
+  el=document.getElementById('lbl_dg_note'); if(el) el.textContent=m.dgNote;
+
+  // ── Switch steps (1 step for 3-phase, 2 steps for single-phase) ──
+  el=document.getElementById('lbl_switch_step1'); if(el) el.textContent=m.switchStep1;
+  el=document.getElementById('div_switch_step2'); if(el) el.style.display=m.switchStep2?'block':'none';
+  el=document.getElementById('lbl_switch_step2'); if(el) el.textContent=m.switchStep2;
+
+  // ── Phase sequence note (20.0/30.0 only) ─────────────────
+  el=document.getElementById('div_phase_seq_note'); if(el) el.classList.toggle('hidden',!m.phaseSeqNote);
+
+  // ── Battery mode display label ────────────────────────────
+  el=document.getElementById('lbl_bat_display'); if(el) el.textContent=m.batDisplayLabel;
+
+  // ── Solar display pictures ────────────────────────────────
+  document.querySelectorAll('.solar-disp-single').forEach(function(e){ e.classList.toggle('hidden', m.solarDisplayPic!=='single'); });
+  document.querySelectorAll('.solar-disp-p1p2p3').forEach(function(e){ e.classList.toggle('hidden', m.solarDisplayPic!=='p1p2p3'); });
+  document.querySelectorAll('.solar-disp-p1p2p3-60').forEach(function(e){ e.classList.toggle('hidden', m.solarDisplayPic!=='p1p2p3_60'); });
+
+  // ── Phase sections ────────────────────────────────────────
+  var is3ph=(m.phase==='three');
+  var is60=(m.strings==='12str'); // 60.0 only
+  var is3phNot60=(is3ph && !is60); // 20.0 and 30.0
+  document.querySelectorAll('.section-3phase').forEach(function(e){ e.classList.toggle('hidden',!is3ph); });
+  document.querySelectorAll('.section-1phase').forEach(function(e){ e.classList.toggle('hidden',is3ph); });
+  document.querySelectorAll('.section-3ph-not60').forEach(function(e){ e.classList.toggle('hidden',!is3phNot60); });
+  document.querySelectorAll('.section-60only').forEach(function(e){ e.classList.toggle('hidden',!is60); });
+
+  // ── String sections ───────────────────────────────────────
+  // parallel = 3.0 Lite / 3.0 / 5.0 → shows parallel section
+  // 2str/3str/6str/12str → shows dropdown section with correct max
+  var isParallel=(m.strings==='parallel');
+  document.getElementById('strings_parallel_section').classList.toggle('hidden', !isParallel);
+  document.getElementById('strings_12_section').classList.toggle('hidden', isParallel);
+
+  // Populate dropdown with correct max strings per model
+  if(!isParallel){
+    var maxStr=2; // default 12.0
+    if(m.strings==='3str')  maxStr=3;
+    else if(m.strings==='6str')  maxStr=6;
+    else if(m.strings==='12str') maxStr=12;
+    var sel=document.getElementById('stpills');
+    if(sel){
+      sel.innerHTML='<option value="0">— Select number of strings —</option>';
+      for(var i=1;i<=maxStr;i++){
+        sel.innerHTML+='<option value="'+i+'">'+i+' String'+(i>1?'s':'')+'</option>';
+      }
+    }
+    // Reset string details when model changes
+    var stc=document.getElementById('stc');
+    if(stc) stc.innerHTML='';
+  }
+
+  // ── Display sections ──────────────────────────────────────
+  var isp1p2p3=(m.displayType==='p1p2p3');
+  document.querySelectorAll('.section-p1p2p3').forEach(function(e){ e.classList.toggle('hidden',!isp1p2p3); });
+  document.querySelectorAll('.section-lcd').forEach(function(e){ e.classList.toggle('hidden',isp1p2p3); });
+
+  // ── Solar Monitoring dongle sections ──────────────────────
+  // sot  = single Solar of Things dongle (3.0Lite/3.0/5.0/12.0)
+  // ess  = single Smart ESS dongle (20.0)
+  // p1p2p3 = 3 separate dongles (30.0/60.0)
+  document.querySelectorAll('.smon-sot').forEach(function(e){ e.classList.toggle('hidden',m.dongle!=='sot'); });
+  document.querySelectorAll('.smon-ess').forEach(function(e){ e.classList.toggle('hidden',m.dongle!=='ess'); });
+  document.querySelectorAll('.smon-p1p2p3').forEach(function(e){ e.classList.toggle('hidden',m.dongle!=='p1p2p3'); });
+
+  // ── Battery and string sections ───────────────────────────
+  bBat();
+  if(isParallel){
+    bStrParallel();
+  } else {
+    // Rebuild dropdown strings with correct specs for this model
+    bStr();
+    // Reset dropdown selection
+    var sel=document.getElementById('stpills');
+    if(sel){ sel.value='0'; ss2(0); }
+  }
+}
+
+var CFG = {
+
+  // ── STEP 1: Set your mode ─────────────────────────────────
+  // 'gsheet' → saves to Google Sheets only       (CURRENT)
+  // 'sql'    → saves to SQL only                 (FUTURE)
+  DATA_MODE : 'gsheet',
+
+  // ── STEP 2: Set DUAL_WRITE ────────────────────────────────
+  // false → saves to DATA_MODE only              (CURRENT)
+  // true  → saves to BOTH GSheets AND SQL        (FUTURE)
+  DUAL_WRITE : false,
+
+  // ── GOOGLE SHEETS ─────────────────────────────────────────
+  // Paste your Apps Script Web App URL here after deploying
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbx0ZzJZtqUGZOrlgxrMdEPyv1ZLK_-z4k2xkv0D2-oaa3bEeVyRDyxooZ1R-vEYCUQh/exec',
+
+  // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
+  // This does not hide the URL above (it's public in this file),
+  // it stops requests that don't know this value from writing to
+  // your Sheet/Drive. See SECURITY.md for how to generate and
+  // store this safely.
+  FORM_KEY : '3a37afdf5aa6386afacf70c4b70abf3b',
+
+  // ── SQL REST API (fill these when SQL is ready) ───────────
+  // Your Node.js / Python API URL (hosted on Railway/Render/GCP/AWS)
+  SQL_API_URL : 'https://your-api.yourdomain.com/api/v1',
+  // API key to secure your endpoint (set same key in your server .env)
+  SQL_API_KEY : 'YOUR_API_KEY_HERE',
+
+  // ── HOW TO SWITCH TO SQL (3 steps) ───────────────────────
+  // 1. Deploy your REST API (server.js)
+  // 2. Fill SQL_API_URL and SQL_API_KEY above
+  // 3. Change DATA_MODE to 'sql'  OR  set DUAL_WRITE to true
+  // That's it — zero other changes needed in this file
+};
+
+// ── UI: Show which backend is active ───────────────────────
+(function(){
+  var dot   = document.getElementById('dbDot');
+  var text  = document.getElementById('dbText');
+  var badge = document.getElementById('dbBadge');
+  if(CFG.DATA_MODE==='sql'){
+    dot.className='db-dot sql';
+    text.textContent='Connected to SQL Database ('+CFG.SQL_API_URL+')';
+    badge.className='db-badge sql-badge';badge.textContent='SQL DB';
+  } else if(CFG.DUAL_WRITE){
+    text.textContent='Dual Write: Google Sheets + SQL Database';
+    badge.textContent='Dual';
+  } else {
+    text.textContent='Connected to Google Sheets';
+    badge.textContent='GSheets';
+  }
+})();
+
+// ════════════════════════════════════════════════════════════
+//  FILE REGISTRY — all upload fields
+// ════════════════════════════════════════════════════════════
+var FF = {
+  f_sld :{c:'c_sld', l:'SLD_Document'},
+  f_ds  :{c:'c_ds',  l:'Module_Datasheet'},
+  f_db  :{c:'c_db',  l:'DCDB_Picture'},
+  f_fu  :{c:'c_fu',  l:'Fuse_Picture'},
+  f_sp  :{c:'c_sp',  l:'SPD_Picture'},
+  f_se  :{c:'c_se',  l:'SPD_Earthing'},
+  f_p1  :{c:'c_p1',  l:'P1_Solar_Display_Video'},
+  f_p2  :{c:'c_p2',  l:'P2_Solar_Display_Video'},
+  f_p3  :{c:'c_p3',  l:'P3_Solar_Display_Video'},
+  f_sc  :{c:'c_sc',  l:'Battery_SOC_Screenshot_Solar'},
+  f_s5  :{c:'c_s5',  l:'Solar_50pct_Screenshot'},
+  f_nv  :{c:'c_nv',  l:'Nominal_Load_Video'},
+  f_flv :{c:'c_flv', l:'Full_Load_Video_Solar'},
+  f_de  :{c:'c_de',  l:'DC_Earthing_Picture'},
+  f_wf  :{c:'c_wf',  l:'WiFi_Router_Solar'},
+  f_d1a :{c:'c_d1a', l:'Dongle_P1_Picture'},
+  f_d1b :{c:'c_d1b', l:'Dongle_P1_2_Picture'},
+  f_d2a :{c:'c_d2a', l:'Dongle_P2_Picture'},
+  f_d2b :{c:'c_d2b', l:'Dongle_P2_1_Picture'},
+  f_d3a :{c:'c_d3a', l:'Dongle_P3_Picture'},
+  f_d3b :{c:'c_d3b', l:'Dongle_P3_1_Picture'},
+  f_a1a :{c:'c_a1a', l:'App_P1_Screenshot'},
+  f_a1b :{c:'c_a1b', l:'App_P1_2_Screenshot'},
+  f_a2a :{c:'c_a2a', l:'App_P2_Screenshot'},
+  f_a2b :{c:'c_a2b', l:'App_P2_2_Screenshot'},
+  f_a3a :{c:'c_a3a', l:'App_P3_Screenshot'},
+  f_a3b :{c:'c_a3b', l:'App_P3_2_Screenshot'},
+  f_expv:{c:'c_expv',l:'Export_Setting_Video'},
+  f_ac  :{c:'c_ac',  l:'ACDB_Picture'},
+  f_ad  :{c:'c_ad',  l:'AC_Output_Display_Video'},
+  f_bsc :{c:'c_bsc', l:'Battery_SOC_Screenshot_BatteryTest'},
+  f_bt  :{c:'c_bt',  l:'Battery_Load_Test_Video'},
+  f_ae  :{c:'c_ae',  l:'AC_Earthing_Picture'},
+  f_ne  :{c:'c_ne',  l:'NeutralEarth_Voltage_Picture'},
+  f_dgr :{c:'c_dgr', l:'DG_Rating_Picture'},
+  f_dgne:{c:'c_dgne',l:'DG_NeutralEarth_Voltage'},
+  f_dge :{c:'c_dge', l:'DG_Earthing_Picture'},
+  f_wf2 :{c:'c_wf2', l:'WiFi_Router_Battery'},
+  f_ip  :{c:'c_ip',  l:'Installation_Photo'},
+  f_lp  :{c:'c_lp',  l:'Label_Photo'},
+  f_csig:{c:'c_csig',l:'Customer_Signature'},
+};
+
+// ════════════════════════════════════════════════════════════
+//  UI HELPERS
+// ════════════════════════════════════════════════════════════
+function tog(h){
+  var b=h.nextElementSibling,c=h.querySelector('.cv');
+  b.classList.toggle('col');c.classList.toggle('open');
+}
+
+function hf(){
+  var v=gv('fb');
+  var sp=document.getElementById('sp');
+  var sd=document.getElementById('sd');
+
+  // Show/hide PuRE Team card
+  if(v==='pure'){
+    sp.classList.remove('hidden');
+    sd.classList.add('hidden');
+    var b=sp.querySelector('.cb');var c=sp.querySelector('.cv');
+    if(b&&b.classList.contains('col')){b.classList.remove('col');if(c)c.classList.add('open');}
+  } else if(v==='dealer'){
+    sd.classList.remove('hidden');
+    sp.classList.add('hidden');
+    var b=sd.querySelector('.cb');var c=sd.querySelector('.cv');
+    if(b&&b.classList.contains('col')){b.classList.remove('col');if(c)c.classList.add('open');}
+  } else {
+    sp.classList.add('hidden');
+    sd.classList.add('hidden');
+  }
+  pg();
+}
+
+function hs(){
+  var v=document.getElementById('ss').value;
+  var show=(v==='yes');
+
+  var ssec=document.getElementById('ssec');
+  var smon=document.getElementById('smon');
+
+  if(show){
+    ssec.classList.remove('hidden');
+    smon.classList.remove('hidden');
+    // Make sure card bodies are expanded (not collapsed)
+    var ssecBody=ssec.querySelector('.cb');
+    var ssecChev=ssec.querySelector('.cv');
+    if(ssecBody && ssecBody.classList.contains('col')){
+      ssecBody.classList.remove('col');
+      if(ssecChev) ssecChev.classList.add('open');
+    }
+    var smonBody=smon.querySelector('.cb');
+    var smonChev=smon.querySelector('.cv');
+    if(smonBody && smonBody.classList.contains('col')){
+      smonBody.classList.remove('col');
+      if(smonChev) smonChev.classList.add('open');
+    }
+    // Scroll to solar details after a short delay
+    setTimeout(function(){
+      ssec.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 100);
+  } else {
+    ssec.classList.add('hidden');
+    smon.classList.add('hidden');
+  }
+  pg();
+}
+
+function py(el,gid,val){
+  document.querySelectorAll('#'+gid+' .yb').forEach(function(b){b.classList.remove('yes','no')});
+  el.classList.add(val);pg();
+}
+
+function getYN(gid){
+  var el=document.querySelector('#'+gid+' .yb.yes,#'+gid+' .yb.no');
+  return el?(el.classList.contains('yes')?'Yes':'No'):'';
+}
+
+function gv(id){
+  var el=document.getElementById(id);
+  return el?(el.value||'').trim():'';
+}
+
+function ac(inp,cid){
+  var box=document.getElementById(cid);if(!box)return;
+  box.innerHTML='';
+  Array.from(inp.files).forEach(function(f){
+    var ch=document.createElement('div');ch.className='chip';
+    ch.innerHTML='<span>'+(f.type.startsWith('video/')?'📹':'📎')+' '+f.name+' ('+(f.size/1048576).toFixed(1)+' MB)</span><span class="chipx" onclick="this.parentElement.remove()">✕</span>';
+    box.appendChild(ch);
+  });pg();
+}
+
+function r(title,file,desc){
+  document.getElementById('mtitle').textContent=title;
+  document.getElementById('mdesc').textContent=desc;
+  var wrap=document.getElementById('mimg-wrap');
+  wrap.style.display='none'; wrap.innerHTML='';
+
+  // Detect if the file is a video by extension
+  var ext=(file.split('.').pop()||'').toLowerCase();
+  var isVid=(['mp4','mov','avi','webm','mkv','3gp'].indexOf(ext)>=0);
+
+  // If file already has a video extension → show video directly
+  if(isVid){
+    var src='images/'+file;
+    var vid=document.createElement('video');
+    vid.controls=true;
+    vid.style.cssText='width:100%;border-radius:10px;border:1px solid var(--s2);background:#000';
+    vid.innerHTML='<source src="'+src+'" type="video/'+ext+'">Your browser does not support video.';
+    vid.onerror=function(){ showNotAvailable(); };
+    wrap.style.display='block';
+    wrap.appendChild(vid);
+    document.getElementById('modal').classList.add('open');
+    return;
+  }
+
+  // Otherwise try image extensions in order: jpg → jpeg → png → pdf → exact file
+  var base='images/'+file.replace(/\.[^.]+$/,'');
+  var tries=[base+'.jpg', base+'.jpeg', base+'.png', base+'.gif', base+'.webp', 'images/'+file];
+  var i=0;
+
+  function tryNext(){
+    if(i>=tries.length){ showNotAvailable(); return; }
+    var src=tries[i++];
+    var isPdf=src.toLowerCase().endsWith('.pdf');
+    if(isPdf){
+      // PDFs — show in iframe
+      wrap.style.display='block';
+      wrap.innerHTML='<iframe src="'+src+'" style="width:100%;height:420px;border-radius:10px;border:1px solid var(--s2)"></iframe>';
+      return;
+    }
+    var img=document.createElement('img');
+    img.style.cssText='width:100%;border-radius:10px;border:1px solid var(--s2)';
+    img.onload=function(){ wrap.style.display='block'; wrap.innerHTML=''; wrap.appendChild(img); };
+    img.onerror=function(){ tryNext(); };
+    img.src=src;
+  }
+
+  function showNotAvailable(){
+    wrap.style.display='block';
+    wrap.innerHTML='<div style="text-align:center;padding:32px 16px;background:var(--s1);border-radius:10px;color:var(--s5)">'+
+      '<div style="font-size:32px;margin-bottom:8px">🖼️</div>'+
+      '<strong style="display:block;color:var(--s7);margin-bottom:4px">Reference not available</strong>'+
+      '<span style="font-size:11px">File: images/'+file+'</span></div>';
+  }
+
+  tryNext();
+  document.getElementById('modal').classList.add('open');
+}
+function closeRef(){document.getElementById('modal').classList.remove('open');}
+
+// rRef(key, title, desc) — picks image from current model's refs config
+// key = refs key like 'spd', 'mcb', 'dongle', 'app' etc.
+// Falls back to a common image if model not selected or key missing
+function rRef(key, title, desc){
+  var m = getModelCfg();
+  var file = (m && m.refs && m.refs[key]) ? m.refs[key] : ('ref-' + key + '.jpg');
+  r(title, file, desc);
+}
+
+// Progress bar
+function pg(){
+  var ins=document.querySelectorAll('#fm input:not([type=radio]):not([type=password]):not([type=file]):not([type=checkbox]):not([type=hidden]),#fm select,#fm textarea');
+  var f=0,t=0;
+  ins.forEach(function(e){if(e.readOnly)return;t++;if((e.value||'').trim())f++;});
+  // Count checkboxes
+  var chk=document.getElementById('agree_check');
+  if(chk){t++;if(chk.checked)f++;}
+  var p=Math.min(100,Math.round(f/Math.max(t,1)*100));
+  document.getElementById('pbf').style.width=p+'%';
+  document.getElementById('pbp').textContent=p+'%';
+  var msgs=['Getting started...','Keep going! 💪','Good progress!','Almost there!','Nearly complete!','Ready to submit! ✓'];
+  document.getElementById('pbl').textContent=msgs[Math.min(Math.floor(p/20),5)];
+}
+
+function setP(pct,st,sub){
+  document.getElementById('uprf').style.width=Math.min(100,pct)+'%';
+  document.getElementById('ust').textContent=st||'';
+  document.getElementById('usub').textContent=sub||'';
+}
+
+function toast(msg,isErr){
+  var t=document.getElementById('tst');t.textContent=msg;
+  t.style.background=isErr?'var(--rd)':'var(--g7)';
+  t.classList.add('show');setTimeout(function(){t.classList.remove('show')},5000);
+}
+
+// ════════════════════════════════════════════════════════════
+//  SERIAL NUMBER LOOKUP (SQL auto-fill)
+//  Works now: shows "SQL not connected" message
+//  Works future: hits your SQL REST API and fills all fields
+// ════════════════════════════════════════════════════════════
+// Serial lookup — activated when SQL is connected
+// function lookupSerial(){ ... } will be added here
+
+// Auto-fill fields from SQL record
+// SQL table columns map to form field IDs directly
+function autoFillFields(rec){
+  var fieldMap={
+    // SQL column name → form field ID
+    model_number   :'prod_model_num',
+    inv_code       :'prod_inv',
+    customer_name  :'cust_name',
+    customer_mobile:'cust_mobile',
+    customer_email :'cust_email',
+    customer_state :'cust_state',
+    customer_city  :'cust_city',
+    customer_pincode:'cust_pincode',
+    customer_address:'cust_address',
+    pv_manufacturer:'pv_mfr',
+    module_wp      :'pv_wp',
+    module_voc     :'pv_voc',
+    module_isc     :'pv_isc',
+    module_imax    :'pv_imax',
+    inst_firm      :'inst_firm',
+    electrician_name:'inst_name',
+    electrician_mobile:'inst_mobile',
+    electrician_email :'inst_email',
+    bms_email      :'bms_email',
+    sot_email      :'sot_email',
+  };
+  Object.keys(fieldMap).forEach(function(col){
+    if(rec[col]!==undefined && rec[col]!==null){
+      var el=document.getElementById(fieldMap[col]);
+      if(el){el.value=rec[col];el.classList.add('autofilled');}
+    }
+  });
+  pg();
+}
+
+function clearAutofill(){
+  document.querySelectorAll('.autofilled').forEach(function(el){el.classList.remove('autofilled');});
+}
+
+// ════════════════════════════════════════════════════════════
+//  COLLECT ALL TEXT DATA
+// ════════════════════════════════════════════════════════════
+function collectData(){
+  var d={};
+  d.Form_Filled_By=gv('fb');
+  d.PuRE_Team_Concern_Name=gv('pure_name');d.PuRE_Team_Email_ID=gv('pure_email');
+  d.Dealer_Showroom_Name=gv('dealer_name');d.Dealer_Code=gv('dealer_code');d.Dealer_Email_ID=gv('dealer_email');
+  d.Customer_Name=gv('cust_name');d.Customer_Mobile=gv('cust_mobile');
+  d.Customer_Email=gv('cust_email');d.Customer_State=gv('cust_state');
+  d.Customer_City=gv('cust_city');d.Customer_Pincode=gv('cust_pincode');
+  d.Customer_Address=gv('cust_address');
+  var mCfg=getModelCfg();
+  d.PuREPower_Model=mCfg?mCfg.name:'PuREPower';
+  d.Model_Variant=gv('sub_model');
+  d.Model_Number=gv('prod_model_num');
+  d.Product_Serial_Number=gv('prod_serial');d.INV_Code=gv('prod_inv');
+  d.Installation_Start_Date=gv('prod_date');
+  d.Solar_Connected=gv('ss')==='yes'?'Yes':(gv('ss')==='no'?'No':'');
+  d.PV_Module_Manufacturer=gv('pv_mfr');
+  d.Module_Maximum_Power_Wp=gv('pv_wp');d.Module_Voc_V=gv('pv_voc');
+  d.Module_Isc_A=gv('pv_isc');d.Module_Imax_A=gv('pv_imax');
+  d.Cable_1Cx6sqmm_Copper_Conduit=getYN('yn_c');
+  d.Number_Of_Strings_Connected=gv('stpills');
+  d.Total_Plant_Capacity_W=gv('total_plant_capacity');
+  // String data
+  for(var n=1;n<=12;n++){
+    d['String'+n+'_Modules_In_Series']=gv('s'+n+'_series');
+    d['String'+n+'_String_Voltage_VDC']=gv('s'+n+'_vdc');
+    d['String'+n+'_Voltage_Not_Exceeding_450V']=getYN('yn_s'+n+'_450');
+    d['String'+n+'_Total_DC_Watts_Per_String']=gv('s'+n+'_watts');
+    d['String'+n+'_Power_Not_Exceeding_7500W']=getYN('yn_s'+n+'_7500');
+    d['String'+n+'_Imax_Not_Exceeding_27A']=getYN('yn_s'+n+'_27a');
+    d['String'+n+'_Total_Plant_Capacity_W']='';
+    d['String'+n+'_MC4_Connector_32A_Used']=getYN('yn_s'+n+'_mc4');
+    d['String'+n+'_PV_Strings_Parallel_Per_MPPT']=gv('s'+n+'_mppt');
+    d['String'+n+'_PV_Input_Voltage_V']=gv('s'+n+'_inv');
+    d['String'+n+'_PV_Input_Current_A']=gv('s'+n+'_ina');
+    d['String'+n+'_PV_Input_Power_W']=gv('s'+n+'_inw');
+    d['String'+n+'_Today_Generation_kWh']=gv('s'+n+'_gen');
+  }
+  // Parallel strings data (single-phase models)
+  d.SP_Modules_In_Series=gv('sp_series');
+  d.SP_Strings_In_Parallel=gv('sp_parallel');
+  d.SP_String_Voltage_VDC=gv('sp_vdc');
+  d.SP_Total_DC_Watts=gv('sp_watts');
+  d.SP_Voltage_Not_Exceeding_450V=getYN('yn_sp_450');
+  d.SP_Power_Within_Limit=getYN('yn_sp_watts');
+  d.SP_Imax_Within_Limit=getYN('yn_sp_imax');
+  d.SP_Total_Plant_Capacity=gv('sp_plant');
+  d.SP_MC4_Connector=getYN('yn_sp_mc4');
+  d.SP_PV_Strings_Parallel_Per_MPPT=gv('sp_mppt');
+  d.SP_PV_Input_Voltage=gv('sp_inv');
+  d.SP_PV_Input_Current=gv('sp_ina');
+  d.SP_PV_Input_Power=gv('sp_inw');
+  d.SP_Today_Generation=gv('sp_gen');
+  d.DCDB_Installed=getYN('yn_dc');d.DC_Lugs_Crimped=getYN('yn_cr');d.Correct_Polarity=getYN('yn_pl');
+  // PV readings per string (collected in string loop below)
+  d.Battery_Charging_Through_Solar=getYN('yn_bs');
+  d.Conduct_Load_Test_Off_Grid_Solar=getYN('yn_lt');
+  d.All_Nominal_Loads_Solar_Mode=getYN('yn_nl');
+  d.Output_Power_kW_R_P1_1=gv('sol_kw_r1');d.Output_Power_kW_R_P1_2=gv('sol_kw_r2');
+  d.Output_Power_kW_Y_P2_1=gv('sol_kw_y1');d.Output_Power_kW_Y_P2_2=gv('sol_kw_y2');
+  d.Output_Power_kW_B_P3_1=gv('sol_kw_b1');d.Output_Power_kW_B_P3_2=gv('sol_kw_b2');
+  d.All_Full_Loads_Solar_Mode=getYN('yn_fl');
+  d.Output_Power_kVA_R_P1_1=gv('sol_kva_r1');d.Output_Power_kVA_R_P1_2=gv('sol_kva_r2');
+  d.Output_Power_kVA_Y_P2_1=gv('sol_kva_y1');d.Output_Power_kVA_Y_P2_2=gv('sol_kva_y2');
+  d.Output_Power_kVA_B_P3_1=gv('sol_kva_b1');d.Output_Power_kVA_B_P3_2=gv('sol_kva_b2');
+  d.DC_Earthing_Resistance_Ohm=gv('dc_earth_ohm');d.DC_Earthing_Below_5_Ohm=getYN('yn_de');
+  d.Solar_Of_Things_Login_Email=gv('sot_email');
+  d.Grid_Export_Enabled=getYN('yn_ex');
+  d.Manual_Read_Before_Installation=getYN('yn_e0');
+  d.Cable_50sqmm_4Core_Copper_Conduit=getYN('yn_e1');
+  d.Correct_Lug_Type=getYN('yn_e2');
+  d.AC_MCB_4P_125A=getYN('yn_e4');
+  d.RYBNE_Correct_Phase_No_Loose=getYN('yn_e5');
+  d.Input_Output_Neutral_Not_Single_Point=getYN('yn_e6');
+  d.AC_Input_Breakers_Switched_ON=getYN('yn_e7');
+  d.Phase_Sequence_YB_Interchanged=getYN('yn_e8');
+  d.Grid_Input_Voltage_PP_R_P1_1=gv('el_vpp_r1');d.Grid_Input_Voltage_PP_R_P1_2=gv('el_vpp_r2');
+  d.Grid_Input_Voltage_PP_Y_P2_1=gv('el_vpp_y1');d.Grid_Input_Voltage_PP_Y_P2_2=gv('el_vpp_y2');
+  d.Grid_Input_Voltage_PP_B_P3_1=gv('el_vpp_b1');d.Grid_Input_Voltage_PP_B_P3_2=gv('el_vpp_b2');
+  d.Grid_Input_Voltage_PN_R=gv('el_vpn_r');d.Grid_Input_Voltage_PN_Y=gv('el_vpn_y');d.Grid_Input_Voltage_PN_B=gv('el_vpn_b');
+  d.Grid_Input_Current_A=gv('el_ina');d.AC_Input_Frequency_Hz=gv('el_freq');
+  d.Output_Voltage_PP_V=gv('el_ovpp');d.Output_Voltage_PN_V=gv('el_ovpn');
+  d.AC_Output_Frequency_Hz=gv('el_ofreq');d.Output_Power_Grid_Mode_W=gv('el_opw');
+  d.Load_Percent_Per_Phase_Grid=gv('el_load_pct');d.Load_Segregation_17kVA=getYN('yn_ls');
+  d.Output_Power_Battery_Mode_P1_1=gv('bat_opw_p11');d.Output_Power_Battery_Mode_P2_1=gv('bat_opw_p21');d.Output_Power_Battery_Mode_P3_1=gv('bat_opw_p31');
+  d.Output_Voltage_PP_Battery_Mode=gv('bat_vpp');d.Output_Voltage_PN_Battery_Mode=gv('bat_vpn');
+  d.AC_Output_Freq_Battery_Mode=gv('bat_freq');d.Load_Percent_Battery_Mode=gv('bat_load_pct');
+  d.AC_Earthing_Resistance_Ohm=gv('ac_earth_ohm');
+  d.ELCB_Installed=getYN('yn_elcb');
+  d.Number_Of_Diesel_Generators=gv('dg_count');
+  d.DG_Earthing_Resistance_Ohm=gv('dg_earth_ohm');
+  d.DG_Output_Voltage_PP_R=gv('dg_vpp_r');d.DG_Output_Voltage_PP_Y=gv('dg_vpp_y');d.DG_Output_Voltage_PP_B=gv('dg_vpp_b');
+  d.DG_Output_Voltage_PN_R=gv('dg_vpn_r');d.DG_Output_Voltage_PN_Y=gv('dg_vpn_y');d.DG_Output_Voltage_PN_B=gv('dg_vpn_b');
+  d.DG_Mode_Confirmed_LED=getYN('yn_dgm');d.DG_Full_Load_Synchronized=getYN('yn_dgs');
+  d.DG_Test_15_Minutes=getYN('yn_dg15');
+  d.DG_Output_Power_Per_Phase_W=gv('dg_opw');d.DG_Load_Percent=gv('dg_load_pct');d.DG_AC_Output_Frequency=gv('dg_freq');
+  d.Battery_Charging_Through_DG=getYN('yn_bdg');d.Grid_Input_Switched_ON_After_DG=getYN('yn_go');
+  d.Auto_Switch_Back_To_Grid=getYN('yn_as');d.All_Loads_Running_Grid_Mode=getYN('yn_lg');
+  d.PURE_BMS_Login_Email=gv('bms_email');
+  // Battery Mode of Charging — single for both stacks
+  d['Battery_Mode_Of_Charging']=gv('bat_mode_all');
+  // Battery Stack 1 (Battery-1 to Battery-7, Stack 1)
+  for(var b=1;b<=7;b++){
+    d['Battery_S1_'+b+'_Serial']=gv('bs1_'+b+'_serial');
+    d['Battery_S1_'+b+'_Voltage_V']=gv('bs1_'+b+'_v');
+    d['Battery_S1_'+b+'_Charging_Current_A']=gv('bs1_'+b+'_ci');
+    d['Battery_S1_'+b+'_Discharge_Current_A']=gv('bs1_'+b+'_di');
+    d['Battery_S1_'+b+'_SOC_Percent']=gv('bs1_'+b+'_soc');
+  }
+  // Battery Stack 2 (Battery-1 to Battery-7, Stack 2)
+  for(var b=1;b<=7;b++){
+    d['Battery_S2_'+b+'_Serial']=gv('bs2_'+b+'_serial');
+    d['Battery_S2_'+b+'_Voltage_V']=gv('bs2_'+b+'_v');
+    d['Battery_S2_'+b+'_Charging_Current_A']=gv('bs2_'+b+'_ci');
+    d['Battery_S2_'+b+'_Discharge_Current_A']=gv('bs2_'+b+'_di');
+    d['Battery_S2_'+b+'_SOC_Percent']=gv('bs2_'+b+'_soc');
+  }
+  d.Installation_Done_By_Firm=gv('inst_firm');
+  d.Electrician_Name=gv('inst_name');d.Electrician_Mobile=gv('inst_mobile');
+  d.Electrician_Email=gv('inst_email');d.Date_Of_Commissioning=gv('inst_date');
+  d.Net_Meter_Installed=getYN('yn_nm');
+  d.Agreed_IC_Complete=document.getElementById('agree_check').checked?'Yes':'No';
+  d.Remarks=gv('inst_remarks');
+  return d;
+}
+
+// ════════════════════════════════════════════════════════════
+//  COLLECT FILES
+// ════════════════════════════════════════════════════════════
+function allFiles(){
+  var list=[];
+  Object.keys(FF).forEach(function(fid){
+    var inp=document.getElementById(fid);
+    if(inp&&inp.files&&inp.files.length){
+      Array.from(inp.files).forEach(function(f){
+        list.push({file:f,label:FF[fid].l});
+      });
+    }
+  });
+  // Battery screenshot files
+  for(var b=1;b<=7;b++){
+    ['bs1','bs2'].forEach(function(stack){
+      var fid='f_'+stack+'_'+b;
+      var inp=document.getElementById(fid);
+      if(inp&&inp.files&&inp.files.length){
+        Array.from(inp.files).forEach(function(f){
+          list.push({file:f,label:(stack==='bs1'?'Battery_Stack1':'Battery_Stack2')+'_'+b+'_BMS_Screenshot'});
+        });
+      }
+    });
+  }
+  return list;
+}
+
+// ════════════════════════════════════════════════════════════
+//  GOOGLE SHEETS BACKEND
+// ════════════════════════════════════════════════════════════
+var _token=null,_folderId=null,_folderUrl='';
+var _sessionStart=null;      // when form was opened
+var _sessionTimeout=null;    // timeout timer handle
+var _sessionWarned=false;    // whether warning already shown
+var SESSION_LIMIT = 60 * 60 * 1000; // 60 minutes in ms
+var WARN_BEFORE   = 5  * 60 * 1000; // warn 5 min before timeout
+
+function getToken(){
+  return fetch(CFG.GSHEET_URL+'?action=getToken&formKey='+encodeURIComponent(CFG.FORM_KEY))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.status!=='ok') throw new Error('Token error: '+d.message);
+      _token=d.token;
+      _folderId=d.folderId;
+      // Start session timer when token is received
+      _sessionStart=Date.now();
+      _sessionWarned=false;
+      startSessionTimer();
+      return d;
+    });
+}
+
+// ── SESSION TIMER ─────────────────────────────────────────
+// Warns user at 55 minutes, expires at 60 minutes
+function startSessionTimer(){
+  // Clear any existing timers
+  if(_sessionTimeout) clearTimeout(_sessionTimeout);
+
+  // Warn at 55 minutes
+  setTimeout(function(){
+    if(_sessionWarned) return;
+    _sessionWarned=true;
+    showSessionWarning();
+  }, SESSION_LIMIT - WARN_BEFORE); // 55 minutes
+
+  // Expire at 60 minutes
+  _sessionTimeout=setTimeout(function(){
+    expireSession();
+  }, SESSION_LIMIT); // 60 minutes
+}
+
+function showSessionWarning(){
+  // Show warning toast — 5 minutes remaining
+  var warn=document.createElement('div');
+  warn.id='session-warn';
+  warn.style.cssText=[
+    'position:fixed','top:70px','left:50%',
+    'transform:translateX(-50%)',
+    'background:#f59e0b','color:#fff',
+    'padding:14px 20px','border-radius:10px',
+    'font-size:13px','font-weight:700',
+    'box-shadow:0 4px 20px rgba(0,0,0,.3)',
+    'z-index:9999','text-align:center',
+    'max-width:90vw','line-height:1.5'
+  ].join(';');
+  warn.innerHTML='⚠️ Your session expires in 5 minutes.<br>Please submit the form soon.';
+  document.body.appendChild(warn);
+
+  // Auto remove warning after 30 seconds
+  setTimeout(function(){
+    var el=document.getElementById('session-warn');
+    if(el) el.remove();
+  }, 30000);
+}
+
+function expireSession(){
+  // Clear token — form can no longer submit
+  _token=null;
+
+  // Show full-screen timeout overlay
+  var ov=document.createElement('div');
+  ov.id='session-expired';
+  ov.style.cssText=[
+    'position:fixed','inset:0',
+    'background:rgba(15,23,42,0.92)',
+    'backdrop-filter:blur(6px)',
+    'z-index:9999',
+    'display:flex','align-items:center','justify-content:center',
+    'padding:20px'
+  ].join(';');
+  ov.innerHTML=[
+    '<div style="background:#fff;border-radius:18px;padding:32px 24px;',
+    'text-align:center;max-width:380px;width:100%">',
+    '<div style="font-size:48px;margin-bottom:12px">⏱️</div>',
+    '<h2 style="font-size:18px;font-weight:800;color:#0f3d1f;margin-bottom:8px">',
+    'Session Expired</h2>',
+    '<p style="font-size:13px;color:#64748b;line-height:1.6;margin-bottom:20px">',
+    'Your session has expired after 60 minutes for security.<br>',
+    'Please refresh the page to start a new session.<br>',
+    '<strong style="color:#ef4444">Your filled data will be lost.</strong></p>',
+    '<button onclick="location.reload()" style="',
+    'width:100%;padding:14px;background:#166534;color:#fff;',
+    'border:none;border-radius:10px;font-size:15px;font-weight:700;',
+    'cursor:pointer;font-family:inherit">',
+    '🔄 Refresh Page</button>',
+    '<p style="font-size:11px;color:#94a3b8;margin-top:12px">',
+    'Tip: Try to submit within 60 minutes of opening the form</p>',
+    '</div>'
+  ].join('');
+  document.body.appendChild(ov);
+}
+
+function getCustomerFolder(customerName,dateStr){
+  var m=getModelCfg();
+  var modelName=m?m.name:'';
+  return fetch(CFG.GSHEET_URL+'?action=getFolder&customerName='+encodeURIComponent(customerName)+'&dateStr='+dateStr+'&modelName='+encodeURIComponent(modelName)+'&formKey='+encodeURIComponent(CFG.FORM_KEY))
+    .then(function(r){return r.json();})
+    .then(function(d){if(d.status==='ok'){_folderId=d.folderId;_folderUrl=d.folderUrl;}return d;});
+}
+
+function publishFile(fileId){
+  return fetch(CFG.GSHEET_URL+'?action=publishFile&fileId='+fileId+'&formKey='+encodeURIComponent(CFG.FORM_KEY))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.status!=='ok') throw new Error('Publish error: '+(d.message||''));
+      return d.fileUrl;
+    });
+}
+
+function uploadFileDirect(file,label,onProgress){
+  var meta={name:label+'_'+file.name,parents:[_folderId]};
+  return fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable',{
+    method:'POST',
+    headers:{
+      'Authorization':'Bearer '+_token,
+      'Content-Type':'application/json',
+      'X-Upload-Content-Type':file.type||'application/octet-stream',
+      'X-Upload-Content-Length':file.size
+    },
+    body:JSON.stringify(meta)
+  })
+  .then(function(r){
+    if(!r.ok) throw new Error('Session init failed: '+r.status);
+    var loc=r.headers.get('Location');
+    if(!loc) throw new Error('No upload location');
+    return loc;
+  })
+  .then(function(uploadUrl){
+    return new Promise(function(resolve,reject){
+      var xhr=new XMLHttpRequest();
+      xhr.open('PUT',uploadUrl,true);
+      xhr.setRequestHeader('Content-Type',file.type||'application/octet-stream');
+      xhr.upload.onprogress=function(e){if(e.lengthComputable&&onProgress)onProgress(e.loaded/e.total);};
+      xhr.onload=function(){
+        if(xhr.status===200||xhr.status===201){
+          try{resolve(JSON.parse(xhr.responseText));}
+          catch(e){reject(new Error('Bad Drive response'));}
+        } else {reject(new Error('Drive upload failed: '+xhr.status));}
+      };
+      xhr.onerror=function(){reject(new Error('XHR network error'));};
+      xhr.send(file);
+    });
+  })
+  .then(function(driveFile){
+    return publishFile(driveFile.id).then(function(url){
+      return{label:label,fileUrl:url};
+    });
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+//  SQL BACKEND
+//  Future: replace CFG.SQL_API_URL with your API endpoint
+//  Expected POST body: { textData, fileLinks, customerName, submittedAt }
+//  Expected GET /lookup?serial=XX : { found: bool, record: {...} }
+// ════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════
+//  SQL SUBMIT — called automatically when DATA_MODE='sql'
+//  or DUAL_WRITE=true. No changes needed here.
+//  Your API receives: { textData, fileLinks, customerName, submittedAt }
+// ════════════════════════════════════════════════════════════
+function submitToSQL(textData,fileLinks,customerName,submittedAt){
+  return fetch(CFG.SQL_API_URL+'/submit',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': CFG.SQL_API_KEY   // security — matches your server .env
+    },
+    body:JSON.stringify({
+      textData     : textData,
+      fileLinks    : fileLinks,
+      customerName : customerName,
+      submittedAt  : submittedAt
+    })
+  })
+  .then(function(r){return r.json();})
+  .catch(function(err){
+    console.error('SQL submit error:',err);
+    return {status:'error',message:err.message};
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+//  MAIN SUBMIT — routes to GSheets / SQL / Both
+// ════════════════════════════════════════════════════════════
+function sub(){
+  // Validation
+  var miss=[];
+  if(!gv('fb')) miss.push('Form Filled By');
+  if(!gv('prod_model')) miss.push('PuREPower Model');
+  if(gv('prod_model')==='3.0/5.0'&&!gv('sub_model')) miss.push('Model Variant (3.0 or 5.0)');
+  if(!gv('cust_name')) miss.push('Customer Name');
+  if(!gv('cust_mobile')) miss.push('Customer Mobile');
+  if(!gv('ss')) miss.push('Solar Connected?');
+  if(!gv('prod_serial')) miss.push('Product Serial Number');
+  if(!document.getElementById('agree_check').checked) miss.push('Agreement checkbox');
+  if(gv('fb')==='pure'){if(!gv('pure_name'))miss.push('PuRE Team Name');if(!gv('pure_email'))miss.push('PuRE Team Email');}
+  if(gv('fb')==='dealer'){if(!gv('dealer_name'))miss.push('Showroom Name');if(!gv('dealer_code'))miss.push('Dealer Code');}
+  if(miss.length){toast('⚠️ Required: '+miss.slice(0,3).join(', ')+(miss.length>3?' +'+(miss.length-3)+' more':''),true);return;}
+
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='Submitting...';
+  document.getElementById('uov').classList.add('open');
+  setP(2,'Getting ready...','');
+
+  var textData=collectData();
+  var filledCount=Object.values(textData).filter(function(v){return v&&v!=='';}).length;
+  var customerName=gv('cust_name');
+  var dateStr=new Date().toISOString().substring(0,10);
+  var submittedAt=new Date().toISOString();
+  var files=allFiles();
+  var totalFiles=files.length;
+  var uploadedLinks={};
+  var uploadedCount=0;
+
+  function finish(){
+    setP(92,'Saving data...','');
+    var saves=[];
+
+    // GSheets save
+    if(CFG.DATA_MODE==='gsheet'||CFG.DUAL_WRITE){
+      var gsSave=fetch(CFG.GSHEET_URL,{
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify({formKey:CFG.FORM_KEY,token:_token,textData:textData,fileLinks:uploadedLinks,folderUrl:_folderUrl,customerName:customerName,submittedAt:submittedAt})
+      }).then(function(r){return r.text();});
+      saves.push(gsSave);
+    }
+
+    // SQL save
+    if(CFG.DATA_MODE==='sql'||CFG.DUAL_WRITE){
+      saves.push(submitToSQL(textData,uploadedLinks,customerName,submittedAt));
+    }
+
+    Promise.all(saves)
+      .then(function(){
+        setP(100,'Done! ✓','');
+        setTimeout(function(){
+          document.getElementById('uov').classList.remove('open');
+          btn.disabled=false;btn.textContent='Submit I&C Form';
+          showSuccess(filledCount,uploadedCount,customerName,gv('cust_mobile'),submittedAt);
+        },600);
+      })
+      .catch(function(err){
+        document.getElementById('uov').classList.remove('open');
+        btn.disabled=false;btn.textContent='Submit I&C Form';
+        toast('⚠️ Save error — please retry',true);
+        console.error(err);
+      });
+  }
+
+  function processFile(idx){
+    if(idx>=files.length){finish();return;}
+    var item=files[idx];
+    var sizeMB=(item.file.size/1048576).toFixed(1);
+    setP((idx/Math.max(totalFiles,1))*88+2,'File '+(idx+1)+' of '+totalFiles+': '+item.label,item.file.name+' ('+sizeMB+' MB)');
+    uploadFileDirect(item.file,item.label,function(pct){
+      setP((idx/Math.max(totalFiles,1))*88+pct*(88/Math.max(totalFiles,1))+2,'Uploading '+item.label+' — '+Math.round(pct*100)+'%',item.file.name+' ('+sizeMB+' MB)');
+    })
+    .then(function(result){
+      uploadedLinks[result.label]=result.fileUrl;
+      uploadedCount++;
+      processFile(idx+1);
+    })
+    .catch(function(err){
+      console.error('Upload failed:',item.label,err);
+      toast('⚠️ '+item.label+' upload failed — continuing',true);
+      processFile(idx+1);
+    });
+  }
+
+  if(totalFiles===0){
+    setP(10,'Creating folder...','');
+    var prep=(CFG.DATA_MODE==='gsheet'||CFG.DUAL_WRITE)
+      ? getCustomerFolder(customerName,dateStr).catch(function(){})
+      : Promise.resolve();
+    prep.then(function(){finish();});
+    return;
+  }
+
+  document.getElementById('uovTitle').textContent='Uploading '+totalFiles+' file(s)...';
+  setP(5,'Getting upload token...','');
+  getToken()
+    .then(function(){setP(8,'Creating customer folder...','');return getCustomerFolder(customerName,dateStr);})
+    .then(function(){processFile(0);})
+    .catch(function(err){
+      document.getElementById('uov').classList.remove('open');
+      btn.disabled=false;btn.textContent='Submit I&C Form';
+      toast('❌ Upload init failed: '+err.message,true);
+    });
+}
+
+// ════════════════════════════════════════════════════════════
+//  SUCCESS & CONFETTI
+// ════════════════════════════════════════════════════════════
+function showSuccess(fields,files,name,mobile,at){
+  document.getElementById('sucFields').textContent=fields;
+  document.getElementById('sucFiles').textContent=files;
+  var t=new Date(at);
+  document.getElementById('sucTime').textContent=t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('sucName').textContent=name||'—';
+  document.getElementById('sucDetail').textContent=mobile?'Mobile: '+mobile:'';
+  document.getElementById('sucRef').textContent='IC-'+Date.now().toString(36).toUpperCase().slice(-6);
+  document.getElementById('fm').style.display='none';
+  var suc=document.getElementById('suc');suc.style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  confetti();
+}
+
+function confetti(){
+  var w=document.getElementById('cfw');
+  var colors=['#16a34a','#22c55e','#f59e0b','#3b82f6','#8b5cf6','#ec4899'];
+  for(var i=0;i<80;i++){(function(i){setTimeout(function(){
+    var p=document.createElement('div');p.className='cfp';
+    var sz=Math.random()*10+6;
+    p.style.cssText='left:'+Math.random()*100+'vw;width:'+sz+'px;height:'+sz+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>.5?'50%':'2px')+';animation-duration:'+(Math.random()*2+1.5)+'s';
+    w.appendChild(p);setTimeout(function(){p.remove();},4000);
+  },i*30);})(i);}
+}
+
+function rst(){
+  document.getElementById('suc').style.display='none';
+  document.getElementById('fm').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ════════════════════════════════════════════════════════════
+//  BUILD DYNAMIC SECTIONS
+// ════════════════════════════════════════════════════════════
+
+// String fields (12 strings, corrected to 7500W and 27A)
+function bStr(){
+  var c=document.getElementById('stc');if(!c)return;c.innerHTML='';
+  var m=getModelCfg();
+  var sw=m?m.stringWatts:7500;
+  var im=m?m.imax:27;
+  var maxStr=12;
+  if(m){
+    if(m.strings==='2str') maxStr=2;
+    else if(m.strings==='3str') maxStr=3;
+    else if(m.strings==='6str') maxStr=6;
+    else maxStr=12;
+  }
+  for(var n=1;n<=maxStr;n++){
+    var d=document.createElement('div');d.className='sb';d.id='sb'+n;
+    var h='';
+    if(n>1) h+='<hr class="div">';
+    h+='<div class="sh">&#9889; String '+n+' Details</div>';
+    h+='<div class="g2">';
+    h+='<div class="field"><label class="fl">Enter the number of modules connected in series</label>';
+    h+='<span class="fh">Note: N series = 450 / Voltage at maximum power of one panel (Voc)</span>';
+    h+='<input type="number" id="s'+n+'_series" placeholder="Count"></div>';
+    h+='<div class="field"><label class="fl">Enter the string voltage VDC (V)</label>';
+    h+='<input type="number" id="s'+n+'_vdc" placeholder="V"></div></div>';
+    h+='<div class="field"><label class="fl">Confirm that each string voltage did not exceed 450V per string</label>';
+    h+='<div class="yn" id="yn_s'+n+'_450">';
+    h+='<label class="yb" onclick="py(this,&quot;yn_s&quot;+n+&quot;_450&quot;,&quot;yes&quot;)"><input type="radio" name="ys'+n+'450"><span class="dot"></span>Yes</label>';
+    h+='<label class="yb" onclick="py(this,&quot;yn_s&quot;+n+&quot;_450&quot;,&quot;no&quot;)"><input type="radio" name="ys'+n+'450"><span class="dot"></span>No</label>';
+    h+='</div></div>';
+    h+='<div class="g2">';
+    h+='<div class="field"><label class="fl">Enter total system size (DC Watts) per string (W)</label>';
+    h+='<input type="number" id="s'+n+'_watts" placeholder="W"></div></div>';
+    h+='<div class="field"><label class="fl">Confirm that it did not exceed '+sw+' watts per string</label>';
+    h+='<div class="yn" id="yn_s'+n+'_sw">';
+    h+='<label class="yb" onclick="py(this,&quot;yn_s&quot;+n+&quot;_sw&quot;,&quot;yes&quot;)"><input type="radio" name="ys'+n+'sw"><span class="dot"></span>Yes</label>';
+    h+='<label class="yb" onclick="py(this,&quot;yn_s&quot;+n+&quot;_sw&quot;,&quot;no&quot;)"><input type="radio" name="ys'+n+'sw"><span class="dot"></span>No</label>';
+    h+='</div></div>';
+    h+='<div class="field"><label class="fl">Confirm that Imax did not exceed '+im+'A per string</label>';
+    h+='<div class="yn" id="yn_s'+n+'_im">';
+    h+='<label class="yb" onclick="py(this,&quot;yn_s&quot;+n+&quot;_im&quot;,&quot;yes&quot;)"><input type="radio" name="ys'+n+'im"><span class="dot"></span>Yes</label>';
+    h+='<label class="yb" onclick="py(this,&quot;yn_s&quot;+n+&quot;_im&quot;,&quot;no&quot;)"><input type="radio" name="ys'+n+'im"><span class="dot"></span>No</label>';
+    h+='</div></div>';
+    h+='<div class="field"><label class="fl">Use 2-in-1-out MC4 connector (32A) when connecting two strings in parallel (If Applicable)</label>';
+    h+='<div class="yn" id="yn_s'+n+'_mc4">';
+    h+='<label class="yb" onclick="py(this,&quot;yn_s&quot;+n+&quot;_mc4&quot;,&quot;yes&quot;)"><input type="radio" name="ys'+n+'mc4"><span class="dot"></span>Yes</label>';
+    h+='<label class="yb" onclick="py(this,&quot;yn_s&quot;+n+&quot;_mc4&quot;,&quot;no&quot;)"><input type="radio" name="ys'+n+'mc4"><span class="dot"></span>No</label>';
+    h+='</div></div>';
+    h+='<div class="field"><label class="fl">Enter Number of PV strings in parallel per MPPT</label>';
+    h+='<input type="number" id="s'+n+'_mppt" placeholder="Count"></div>';
+    h+='<div class="g4">';
+    h+='<div class="field"><label class="fl">PV Input Voltage (V)</label><input type="number" id="s'+n+'_inv" placeholder="V"></div>';
+    h+='<div class="field"><label class="fl">PV Input Current (A)</label><input type="number" id="s'+n+'_ina" placeholder="A"></div>';
+    h+='<div class="field"><label class="fl">PV Input Power (W)</label><input type="number" id="s'+n+'_inw" placeholder="W"></div>';
+    h+='<div class="field"><label class="fl">Today Generation (kWh)</label><input type="number" id="s'+n+'_gen" placeholder="kWh"></div>';
+    h+='</div>';
+    d.innerHTML=h;
+    c.appendChild(d);
+  }
+}
+
+
+// Battery fields — model-aware (1/2/5/7/14 batteries)
+function bBat(){
+  var m=getModelCfg();
+  var count=m?m.batteries:1;
+  var stacks=m?m.batteryStacks:1;
+  var c1=document.getElementById('bc_s1');if(!c1)return;c1.innerHTML='';
+  var c2=document.getElementById('bc_s2');if(c2)c2.innerHTML='';
+
+  // Mode of Charging — once at top ONLY if not per-battery (not 20.0/30.0)
+  var batModePerBat=m?m.batModePerBat:false;
+  var h='';
+  if(!batModePerBat && stacks!==2){
+    h+='<div class="field"><label class="fl">Mode of Charging (Input AC Grid / Solar / DG)</label>';
+    h+='<select id="bat_mode_all"><option value="">— Select mode —</option><option>Input AC Grid</option><option>Solar</option><option>DG</option></select></div>';
+    h+='<div class="div"></div>';
+  }
+
+  if(stacks===2){
+    // 60.0 — 14 batteries in 2 stacks of 7
+    h+='<div class="bh">🔋 Battery Stack 1</div>';
+    for(var b=1;b<=7;b++){
+      var fid='f_bs1_'+b,cid='c_bs1_'+b;
+      FF[fid]={c:cid,l:'Battery_Stack1_'+b+'_BMS_Screenshot'};
+      if(b>1)h+='<hr class="div">';
+      h+='<div class="sh">🔋 Battery-'+b+' Stack 1</div>';
+      h+=batFields('bs1_'+b,fid,cid,'Battery '+b+' Stack 1',false);
+    }
+    h+='<div class="div"></div>';
+    h+='<div class="bh">🔋 Battery Stack 2</div>';
+    for(var b=1;b<=7;b++){
+      var fid='f_bs2_'+b,cid='c_bs2_'+b;
+      FF[fid]={c:cid,l:'Battery_Stack2_'+b+'_BMS_Screenshot'};
+      if(b>1)h+='<hr class="div">';
+      h+='<div class="sh">🔋 Battery-'+b+' Stack 2</div>';
+      h+=batFields('bs2_'+b,fid,cid,'Battery '+b+' Stack 2',false);
+    }
+  } else {
+    // Single stack — 1 battery (3.0L/3.0/5.0), 2 (12.0), 5 (20.0), 7 (30.0)
+    if(count===1){
+      var fid='f_bs1_1',cid='c_bs1_1';
+      FF[fid]={c:cid,l:'Battery_BMS_Screenshot'};
+      h+='<div class="sh">🔋 Battery Details</div>';
+      h+=batFields('bs1_1',fid,cid,'Battery',false);
+    } else {
+      for(var b=1;b<=count;b++){
+        var fid='f_bs1_'+b,cid='c_bs1_'+b;
+        FF[fid]={c:cid,l:'Battery_'+b+'_BMS_Screenshot'};
+        if(b>1)h+='<hr class="div">';
+        h+='<div class="sh">🔋 Battery-'+b+'</div>';
+        h+=batFields('bs1_'+b,fid,cid,'Battery-'+b,batModePerBat);
+      }
+    }
+  }
+  c1.innerHTML=h;
+}
+
+
+function batFields(prefix,fid,cid,label,showMode){
+  var h='';
+  if(showMode){
+    h+='<div class="field"><label class="fl">Mode of Charging (Input AC Grid / Solar / DG)</label>';
+    h+='<select id="'+prefix+'_mode"><option value="">— Select mode —</option><option>Input AC Grid</option><option>Solar</option><option>DG</option></select></div>';
+  }
+  h+='<div class="field"><label class="fl">Enter Battery Serial Number</label><input type="text" id="'+prefix+'_serial" placeholder="Enter serial number"></div>';
+  h+='<div class="g4"><div class="field"><label class="fl">Battery Voltage (V)</label><input type="number" id="'+prefix+'_v" placeholder="V"></div>';
+  h+='<div class="field"><label class="fl">Charging Current (A)</label><input type="number" id="'+prefix+'_ci" placeholder="A"></div>';
+  h+='<div class="field"><label class="fl">Discharge Current (A)</label><input type="number" id="'+prefix+'_di" placeholder="A"></div>';
+  h+='<div class="field"><label class="fl">SOC % (Discharging)</label><input type="number" id="'+prefix+'_soc" placeholder="%"></div></div>';
+  h+='<div class="field"><label class="fl">Upload screenshot of PURE BMS App — '+label+'</label>';
+  h+='<div class="ar"><div class="uw"><label class="ul"><input type="file" id="'+fid+'" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/*" multiple onchange="ac(this,&quot;'+cid+'&quot;)"><span class="ui">📎</span><div class="ut"><strong>Attach '+label+' Screenshot</strong><span>JPG, PNG or Video</span></div></label><div class="chips" id="'+cid+'"></div></div></div></div>';
+  return h;
+}
+
+// Parallel strings section — for single-phase models
+function bStrParallel(){
+  var c=document.getElementById('strings_parallel_section');if(!c)return;
+  var m=getModelCfg();
+  if(!m){c.innerHTML='';return;}
+  var sw=m.stringWatts;
+  var im=m.imax;
+  var str=m.strings; // 'parallel','2str','3str','6str'
+
+  // Determine number of fixed strings
+  var strCount=1;
+  if(str==='2str') strCount=2;
+  else if(str==='3str') strCount=3;
+  else if(str==='6str') strCount=6;
+
+  var h='<div class="sh">&#9889; Connected Strings</div>';
+
+  if(strCount===1){
+    // ── Parallel (3.0 Lite / 3.0 / 5.0) — single set of fields ──
+    h+=spStringFields(1,sw,im,true);
+  } else {
+    // ── Fixed count (12.0=2str / 20.0=3str / 30.0=6str) ──
+    // Each string gets its own section
+    for(var s=1;s<=strCount;s++){
+      if(s>1) h+='<hr class="div">';
+      h+='<div class="sh">&#9889; String '+s+'</div>';
+      h+=spStringFields(s,sw,im,false);
+    }
+  }
+
+  // Common fields at the bottom — Total Plant Capacity + PV readings
+  h+='<div class="div"></div>';
+  h+='<div class="field"><label class="fl">Enter Total Plant Capacity (W)</label><input type="number" id="sp_plant" placeholder="W"></div>';
+  h+='<div class="field"><label class="fl">Enter Number of PV strings in parallel per MPPT</label><input type="number" id="sp_mppt" placeholder="Count"></div>';
+  h+='<div class="g4"><div class="field"><label class="fl">PV Input Voltage (V)</label><input type="number" id="sp_inv" placeholder="V"></div>';
+  h+='<div class="field"><label class="fl">PV Input Current (A)</label><input type="number" id="sp_ina" placeholder="A"></div>';
+  h+='<div class="field"><label class="fl">PV Input Power (W)</label><input type="number" id="sp_inw" placeholder="W"></div>';
+  h+='<div class="field"><label class="fl">Today Generation (kWh)</label><input type="number" id="sp_gen" placeholder="kWh"></div></div>';
+
+  c.innerHTML=h;
+}
+
+// Build fields for one string (used by bStrParallel)
+function spStringFields(n,sw,im,showParallel){
+  var h='';
+  var p=n; // prefix for IDs: sp1_, sp2_ etc
+
+  h+='<div class="g2"><div class="field"><label class="fl">Enter the number of modules connected in series</label>';
+  h+='<span class="fh">Note: N series = 450 / Voltage at maximum power of one panel (Voc)</span>';
+  h+='<input type="number" id="sp'+p+'_series" placeholder="Count"></div>';
+  if(showParallel){
+    h+='<div class="field"><label class="fl">Enter the number of strings connected in parallel</label>';
+    h+='<input type="number" id="sp'+p+'_parallel" placeholder="Count"></div>';
+  } else {
+    h+='<div class="field"><label class="fl">Enter the string voltage VDC (V)</label>';
+    h+='<input type="number" id="sp'+p+'_vdc" placeholder="V"></div>';
+  }
+  h+='</div>';
+
+  if(showParallel){
+    h+='<div class="field"><label class="fl">Enter the string voltage VDC (V)</label>';
+    h+='<input type="number" id="sp'+p+'_vdc" placeholder="V"></div>';
+  }
+
+  h+='<div class="g2"><div class="field"><label class="fl">Enter total system size (DC Watts) per string (W)</label><input type="number" id="sp'+p+'_watts" placeholder="W"></div>';
+  h+='<div class="field"><label class="fl">Confirm that it did not exceed '+sw+' watts per string</label>';
+  h+='<div class="yn" id="yn_sp'+p+'_watts">';
+  h+='<label class="yb" onclick="py(this,&quot;yn_sp'+p+'_watts&quot;,&quot;yes&quot;)"><input type="radio" name="yspw'+p+'"><span class="dot"></span>Yes</label>';
+  h+='<label class="yb" onclick="py(this,&quot;yn_sp'+p+'_watts&quot;,&quot;no&quot;)"><input type="radio" name="yspw'+p+'"><span class="dot"></span>No</label>';
+  h+='</div></div></div>';
+
+  h+='<div class="g2"><div class="field"><label class="fl">Confirm that each string voltage did not exceed 450V</label>';
+  h+='<div class="yn" id="yn_sp'+p+'_450">';
+  h+='<label class="yb" onclick="py(this,&quot;yn_sp'+p+'_450&quot;,&quot;yes&quot;)"><input type="radio" name="ysp4'+p+'"><span class="dot"></span>Yes</label>';
+  h+='<label class="yb" onclick="py(this,&quot;yn_sp'+p+'_450&quot;,&quot;no&quot;)"><input type="radio" name="ysp4'+p+'"><span class="dot"></span>No</label>';
+  h+='</div></div>';
+
+  h+='<div class="field"><label class="fl">Confirm that Imax did not exceed '+im+'A per string</label>';
+  h+='<div class="yn" id="yn_sp'+p+'_imax">';
+  h+='<label class="yb" onclick="py(this,&quot;yn_sp'+p+'_imax&quot;,&quot;yes&quot;)"><input type="radio" name="yspim'+p+'"><span class="dot"></span>Yes</label>';
+  h+='<label class="yb" onclick="py(this,&quot;yn_sp'+p+'_imax&quot;,&quot;no&quot;)"><input type="radio" name="yspim'+p+'"><span class="dot"></span>No</label>';
+  h+='</div></div></div>';
+
+  h+='<div class="field"><label class="fl">Use 2-in-1-out MC4 connector (32A) when connecting two strings in parallel (If Applicable)</label>';
+  h+='<div class="yn" id="yn_sp'+p+'_mc4">';
+  h+='<label class="yb" onclick="py(this,&quot;yn_sp'+p+'_mc4&quot;,&quot;yes&quot;)"><input type="radio" name="yspm'+p+'"><span class="dot"></span>Yes</label>';
+  h+='<label class="yb" onclick="py(this,&quot;yn_sp'+p+'_mc4&quot;,&quot;no&quot;)"><input type="radio" name="yspm'+p+'"><span class="dot"></span>No</label>';
+  h+='</div></div>';
+
+  return h;
+}
+function ss2(n){
+  // Show string sections up to n, hide the rest
+  // Max 12 — loop through all possible
+  for(var i=1;i<=12;i++){
+    var e=document.getElementById('sb'+i);
+    if(e) e.classList.toggle('show', i<=n);
+  }
+  pg();
+}
+
+// ════════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════════
+document.addEventListener('input',pg);
+document.addEventListener('change',pg);
+bStr();
+bBat();
+bStrParallel();
+pg();
+</script>
+</body>
+</html>
