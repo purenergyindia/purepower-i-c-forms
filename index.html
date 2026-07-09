@@ -2014,7 +2014,7 @@ var CFG = {
 
   // ── GOOGLE SHEETS ─────────────────────────────────────────
   // Paste your Apps Script Web App URL here after deploying
-  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbyReZxKj7Lg9zRSbetDwR-aYZRRAFlXDzYgJ-_lg8PqiWTs0OydUZigFabiSWToSgBf/exec',
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbzwlaRO7bcZ_F8g9iSQiIKqX9BCm5fV6wXPW5Z7wJc1I_ZOSiVGzApMRcyWwEz0YtTK/exec',
 
   // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
   // This does not hide the URL above (it's public in this file),
@@ -2326,11 +2326,12 @@ function collectData(){
   d.Customer_City=gv('cust_city');d.Customer_Pincode=gv('cust_pincode');
   d.Customer_Address=gv('cust_address');
   var mCfg=getModelCfg();
-  // Save short model value (e.g. "12.0") for sheet tab matching
-  // Full name (e.g. "PuREPower 12.0") saved separately
+  // modelVal = short value for sheet tab routing e.g. "12.0", "3.0", "3.0 Lite"
   var modelVal=gv('prod_model')==='3.0/5.0'?gv('sub_model'):gv('prod_model');
-  d.PuREPower_Model=modelVal||'';
-  d.PuREPower_Model_Full=mCfg?mCfg.name:'PuREPower';
+  // fullName = full display name e.g. "PuREPower 12.0", "PuREPower 3.0"
+  var fullName=mCfg?mCfg.name:('PuREPower '+modelVal);
+  d.PuREPower_Model=fullName||'';        // full name saved to sheet ✅
+  d.PuREPower_Model_Short=modelVal||'';  // short value for tab routing
   d.Model_Variant=gv('sub_model');
   d.Model_Number=gv('prod_model_num');
   d.Product_Serial_Number=gv('prod_serial');d.INV_Code=gv('prod_inv');
