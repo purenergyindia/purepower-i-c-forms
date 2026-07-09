@@ -68,18 +68,7 @@ body{
 }
 
 /* ── PROGRESS BAR ── */
-.pb-wrap{
-  background:var(--wh);border-bottom:1px solid var(--s2);
-  position:sticky;top:52px;z-index:199;
-  padding:8px 14px;box-shadow:var(--sh-sm);
-}
-.pb-in{max-width:920px;margin:0 auto}
-.pb-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
-.pb-lbl{font-size:11px;font-weight:500;color:var(--s5)}
-.pb-pct{font-size:11px;font-weight:700;color:var(--g6)}
-.pb-track{height:5px;background:var(--s2);border-radius:99px;overflow:hidden}
-.pb-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--g6),var(--g5));border-radius:99px;transition:width .4s ease}
-@media(min-width:540px){.pb-wrap{top:58px;padding:10px 20px}}
+
 
 /* ── MAIN ── */
 .main{max-width:920px;margin:0 auto;padding:12px 10px calc(120px + env(safe-area-inset-bottom, 20px))}
@@ -87,17 +76,7 @@ body{
 @media(min-width:769px){.main{padding:22px 20px 80px}}
 
 /* ── DB BANNER ── */
-.db-banner{
-  display:flex;align-items:center;gap:8px;
-  padding:9px 12px;
-  background:var(--bl0);border:1px solid var(--bl1);
-  border-radius:var(--rsm);margin-bottom:12px;
-  font-size:11px;color:var(--s7);flex-wrap:wrap;
-}
-.db-dot{width:7px;height:7px;border-radius:50%;background:var(--g5);flex-shrink:0;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
-.db-dot.sql{background:var(--bl)}
-.db-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--g1);color:var(--g7);white-space:nowrap}
-.db-badge.sql-badge{background:var(--bl1);color:#1e40af}
+
 
 /* ── CARD ── */
 .card{
@@ -490,26 +469,12 @@ input.autofilled{background:#f0fdf4;border-color:var(--g5);color:var(--g7);font-
 </div>
 
 <!-- Progress Bar -->
-<div class="pb-wrap">
-  <div class="pb-in">
-    <div class="pb-meta">
-      <span class="pb-lbl" id="pbl">Getting started...</span>
-      <span class="pb-pct" id="pbp">0%</span>
-    </div>
-    <div class="pb-track"><div class="pb-fill" id="pbf"></div></div>
-  </div>
-</div>
+
 
 <!-- Main -->
 <div class="main">
 <div id="fm">
 
-<!-- DB Status Banner -->
-<div class="db-banner" id="dbBanner">
-  <div class="db-dot" id="dbDot"></div>
-  <span id="dbText">Connected to Google Sheets</span>
-  <span class="db-badge" id="dbBadge">GSheets</span>
-</div>
 
 
 
@@ -2049,7 +2014,7 @@ var CFG = {
 
   // ── GOOGLE SHEETS ─────────────────────────────────────────
   // Paste your Apps Script Web App URL here after deploying
-  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbx6kXzt8-GwTPLBhvVEs2uAvln3Z6QR8JS18S5Fc7fFao-7KwOR64QnVoxHwRB2tISX/exec',
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbwNH7ghaJ35uZreABl5QnsqHHduRpHLHChLeu8w1_n61cUK2IINFn898l6gvGI06v0/exec',
 
   // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
   // This does not hide the URL above (it's public in this file),
@@ -2071,23 +2036,7 @@ var CFG = {
   // That's it — zero other changes needed in this file
 };
 
-// ── UI: Show which backend is active ───────────────────────
-(function(){
-  var dot   = document.getElementById('dbDot');
-  var text  = document.getElementById('dbText');
-  var badge = document.getElementById('dbBadge');
-  if(CFG.DATA_MODE==='sql'){
-    dot.className='db-dot sql';
-    text.textContent='Connected to SQL Database ('+CFG.SQL_API_URL+')';
-    badge.className='db-badge sql-badge';badge.textContent='SQL DB';
-  } else if(CFG.DUAL_WRITE){
-    text.textContent='Dual Write: Google Sheets + SQL Database';
-    badge.textContent='Dual';
-  } else {
-    text.textContent='Connected to Google Sheets';
-    badge.textContent='GSheets';
-  }
-})();
+
 
 // ════════════════════════════════════════════════════════════
 //  FILE REGISTRY — all upload fields
@@ -2302,11 +2251,7 @@ function pg(){
   // Count checkboxes
   var chk=document.getElementById('agree_check');
   if(chk){t++;if(chk.checked)f++;}
-  var p=Math.min(100,Math.round(f/Math.max(t,1)*100));
-  document.getElementById('pbf').style.width=p+'%';
-  document.getElementById('pbp').textContent=p+'%';
-  var msgs=['Getting started...','Keep going! 💪','Good progress!','Almost there!','Nearly complete!','Ready to submit! ✓'];
-  document.getElementById('pbl').textContent=msgs[Math.min(Math.floor(p/20),5)];
+  // Progress bar removed — no UI update needed
 }
 
 function setP(pct,st,sub){
@@ -2381,7 +2326,11 @@ function collectData(){
   d.Customer_City=gv('cust_city');d.Customer_Pincode=gv('cust_pincode');
   d.Customer_Address=gv('cust_address');
   var mCfg=getModelCfg();
-  d.PuREPower_Model=mCfg?mCfg.name:'PuREPower';
+  // Save short model value (e.g. "12.0") for sheet tab matching
+  // Full name (e.g. "PuREPower 12.0") saved separately
+  var modelVal=gv('prod_model')==='3.0/5.0'?gv('sub_model'):gv('prod_model');
+  d.PuREPower_Model=modelVal||'';
+  d.PuREPower_Model_Full=mCfg?mCfg.name:'PuREPower';
   d.Model_Variant=gv('sub_model');
   d.Model_Number=gv('prod_model_num');
   d.Product_Serial_Number=gv('prod_serial');d.INV_Code=gv('prod_inv');
