@@ -492,9 +492,9 @@ input.autofilled{background:#f0fdf4;border-color:var(--g5);color:var(--g7);font-
       <label class="fl">Form Filled by <span class="req">*</span></label>
       <select id="fb" onchange="hf()">
         <option value="">— Select who is filling this form —</option>
-        <option value="pure">PuRE Team</option>
-        <option value="customer">Customer / Customer Electrician Name</option>
-        <option value="dealer">Dealer / Distributor</option>
+        <option value="PuRE Team">PuRE Team</option>
+        <option value="Customer / Customer Electrician Name">Customer / Customer Electrician Name</option>
+        <option value="Dealer / Distributor">Dealer / Distributor</option>
       </select>
     </div>
   </div>
@@ -2014,7 +2014,7 @@ var CFG = {
 
   // ── GOOGLE SHEETS ─────────────────────────────────────────
   // Paste your Apps Script Web App URL here after deploying
-  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbzHUeL7Q40FXe0f4q0wKd3ZQnMvTsjH2aRAeRhWa68ovq0gH6a7nEhnWH-TtCg4qNf7/exec',
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbzdLDJSZUKcJF9U7MPqirUuA9lMgxlkGAmexfegKBc4GLAARy9Ich021cYd0bOLVP60/exec',
 
   // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
   // This does not hide the URL above (it's public in this file),
@@ -2694,8 +2694,8 @@ function sub(){
   if(!gv('ss')) miss.push('Solar Connected?');
   if(!gv('prod_serial')) miss.push('Product Serial Number');
   if(!document.getElementById('agree_check').checked) miss.push('Agreement checkbox');
-  if(gv('fb')==='pure'){if(!gv('pure_name'))miss.push('PuRE Team Name');if(!gv('pure_email'))miss.push('PuRE Team Email');}
-  if(gv('fb')==='dealer'){if(!gv('dealer_name'))miss.push('Showroom Name');if(!gv('dealer_code'))miss.push('Dealer Code');}
+  if(gv('fb')==='PuRE Team'){if(!gv('pure_name'))miss.push('PuRE Team Name');if(!gv('pure_email'))miss.push('PuRE Team Email');}
+  if(gv('fb')==='Dealer / Distributor'){if(!gv('dealer_name'))miss.push('Showroom Name');if(!gv('dealer_code'))miss.push('Dealer Code');}
   if(miss.length){toast('⚠️ Required: '+miss.slice(0,3).join(', ')+(miss.length>3?' +'+(miss.length-3)+' more':''),true);return;}
 
   var btn=document.getElementById('submitBtn');
