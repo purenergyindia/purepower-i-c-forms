@@ -2014,7 +2014,7 @@ var CFG = {
 
   // ── GOOGLE SHEETS ─────────────────────────────────────────
   // Paste your Apps Script Web App URL here after deploying
-  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbwSkZO9qCeQ-NFWuWf-0B3G91pknbhDE9NWBvFOtNYjR9l4Cnsg7N3trGccY3IHncB_/exec',
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbx0ZzJZtqUGZOrlgxrMdEPyv1ZLK_-z4k2xkv0D2-oaa3bEeVyRDyxooZ1R-vEYCUQh/exec',
 
   // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
   // This does not hide the URL above (it's public in this file),
@@ -2319,8 +2319,28 @@ function clearAutofill(){
 function collectData(){
   var d={};
   d.Form_Filled_By=gv('fb');
-  d.PuRE_Team_Concern_Name=gv('pure_name');d.PuRE_Team_Email_ID=gv('pure_email');
-  d.Dealer_Showroom_Name=gv('dealer_name');d.Dealer_Code=gv('dealer_code');d.Dealer_Email_ID=gv('dealer_email');
+  // Only collect fields relevant to who is filling the form
+  var filledBy = gv('fb');
+  if(filledBy === 'PuRE Team'){
+    d.PuRE_Team_Concern_Name = gv('pure_name');
+    d.PuRE_Team_Email_ID     = gv('pure_email');
+    d.Dealer_Showroom_Name   = '';
+    d.Dealer_Code            = '';
+    d.Dealer_Email_ID        = '';
+  } else if(filledBy === 'Dealer / Distributor'){
+    d.PuRE_Team_Concern_Name = '';
+    d.PuRE_Team_Email_ID     = '';
+    d.Dealer_Showroom_Name   = gv('dealer_name');
+    d.Dealer_Code            = gv('dealer_code');
+    d.Dealer_Email_ID        = gv('dealer_email');
+  } else {
+    // Customer / Customer Electrician Name — no dealer or PuRE team fields
+    d.PuRE_Team_Concern_Name = '';
+    d.PuRE_Team_Email_ID     = '';
+    d.Dealer_Showroom_Name   = '';
+    d.Dealer_Code            = '';
+    d.Dealer_Email_ID        = '';
+  }
   d.Customer_Name=gv('cust_name');d.Customer_Mobile=gv('cust_mobile');
   d.Customer_Email=gv('cust_email');d.Customer_State=gv('cust_state');
   d.Customer_City=gv('cust_city');d.Customer_Pincode=gv('cust_pincode');
