@@ -2014,7 +2014,7 @@ var CFG = {
 
   // ── GOOGLE SHEETS ─────────────────────────────────────────
   // Paste your Apps Script Web App URL here after deploying
-  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbzwlaRO7bcZ_F8g9iSQiIKqX9BCm5fV6wXPW5Z7wJc1I_ZOSiVGzApMRcyWwEz0YtTK/exec',
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycby5mJMqoa2GqPoyWrmoalHTMR_JDl3d4W5E_CBhE1-HZwP5tqLlBsrdfaLEyd8T7B_p/exec',
 
   // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
   // This does not hide the URL above (it's public in this file),
@@ -2326,14 +2326,22 @@ function collectData(){
   d.Customer_City=gv('cust_city');d.Customer_Pincode=gv('cust_pincode');
   d.Customer_Address=gv('cust_address');
   var mCfg=getModelCfg();
-  // modelVal = short value for sheet tab routing e.g. "12.0", "3.0", "3.0 Lite"
-  var modelVal=gv('prod_model')==='3.0/5.0'?gv('sub_model'):gv('prod_model');
-  // fullName = full display name e.g. "PuREPower 12.0", "PuREPower 3.0"
-  var fullName=mCfg?mCfg.name:('PuREPower '+modelVal);
-  d.PuREPower_Model=fullName||'';        // full name saved to sheet ✅
-  d.PuREPower_Model_Short=modelVal||'';  // short value for tab routing
-  d.Model_Variant=gv('sub_model');
-  d.Model_Number=gv('prod_model_num');
+
+  // For 3.0/5.0 — sub_model dropdown value is "3.0" or "5.0"
+  // For others — prod_model dropdown value is "12.0", "3.0 Lite" etc.
+  var modelVal = gv('prod_model')==='3.0/5.0' ? gv('sub_model') : gv('prod_model');
+
+  // Full name from MODELS config e.g. "PuREPower 3.0", "PuREPower 12.0"
+  // mCfg is already the correct model (getModelCfg reads sub_model for 3.0/5.0)
+  var fullName = mCfg ? mCfg.name : ('PuREPower ' + modelVal);
+
+  // PuREPower_Model = full name shown in sheet e.g. "PuREPower 3.0"
+  d.PuREPower_Model       = fullName || '';
+  // PuREPower_Model_Short = short value for tab routing e.g. "3.0", "12.0"
+  d.PuREPower_Model_Short = modelVal || '';
+  // Model_Variant = only set for 3.0/5.0 e.g. "3.0" or "5.0"
+  d.Model_Variant         = gv('prod_model')==='3.0/5.0' ? fullName : '';
+  d.Model_Number          = gv('prod_model_num');
   d.Product_Serial_Number=gv('prod_serial');d.INV_Code=gv('prod_inv');
   d.Installation_Start_Date=gv('prod_date');
   d.Solar_Connected=gv('ss')==='yes'?'Yes':(gv('ss')==='no'?'No':'');
