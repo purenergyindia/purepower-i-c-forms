@@ -2014,7 +2014,7 @@ var CFG = {
 
   // ── GOOGLE SHEETS ─────────────────────────────────────────
   // Paste your Apps Script Web App URL here after deploying
-  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbzdLDJSZUKcJF9U7MPqirUuA9lMgxlkGAmexfegKBc4GLAARy9Ich021cYd0bOLVP60/exec',
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbwSkZO9qCeQ-NFWuWf-0B3G91pknbhDE9NWBvFOtNYjR9l4Cnsg7N3trGccY3IHncB_/exec',
 
   // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
   // This does not hide the URL above (it's public in this file),
@@ -2099,12 +2099,12 @@ function hf(){
   var sd=document.getElementById('sd');
 
   // Show/hide PuRE Team card
-  if(v==='pure'){
+  if(v==='PuRE Team'){
     sp.classList.remove('hidden');
     sd.classList.add('hidden');
     var b=sp.querySelector('.cb');var c=sp.querySelector('.cv');
     if(b&&b.classList.contains('col')){b.classList.remove('col');if(c)c.classList.add('open');}
-  } else if(v==='dealer'){
+  } else if(v==='Dealer / Distributor'){
     sd.classList.remove('hidden');
     sp.classList.add('hidden');
     var b=sd.querySelector('.cb');var c=sd.querySelector('.cv');
