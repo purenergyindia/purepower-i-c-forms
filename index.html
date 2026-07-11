@@ -997,7 +997,7 @@ input.autofilled{background:#f0fdf4;border-color:var(--g5);color:var(--g7);font-
 <!-- ══════════════════════════════════════════════════════════
      SECTION 6 — SOLAR MONITORING (conditional)
 ══════════════════════════════════════════════════════════ -->
-<div class="card hidden" id="smon">
+<div class="card" id="smon">
   <div class="ch" onclick="tog(this)">
     <div class="ci">📱</div>
     <span class="ct">Solar Monitoring — Solar of Things</span>
@@ -1099,6 +1099,13 @@ input.autofilled{background:#f0fdf4;border-color:var(--g5);color:var(--g7);font-
     <div class="g2">
       <div class="field"><label class="fl">Enter the login Email ID for Solar of Things App</label><input type="email" id="sot_email" placeholder="email@example.com"></div>
       <div class="field"><label class="fl">Enter the login Password for Solar of Things App</label><input type="password" id="sot_pass" placeholder="••••••••"></div>
+      <div class="field">
+        <label class="fl">Enter DtuID <span class="req">*</span></label>
+        <div class="ar">
+          <div class="uw" style="flex:1"><input type="text" id="dtuid" placeholder="Enter DtuID from Solar of Things / Smart ESS App"></div>
+          <div class="rb"><a class="rt" onclick="rRef('dongle','DtuID Reference','DtuID is found in the Solar of Things App or Smart ESS App under Device Settings')"><span class="ri">🖼️</span><small>Reference</small></a></div>
+        </div>
+      </div>
     </div>
 
     <div class="field">
@@ -2014,7 +2021,7 @@ var CFG = {
 
   // ── GOOGLE SHEETS ─────────────────────────────────────────
   // Paste your Apps Script Web App URL here after deploying
-  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbxfvPSkgDE73NZ9GKtZ_U8JUsnsXnbjLrUEQuL7Q-8I29kMUfGi_-luDLP-zFoIjCZ0/exec',
+  GSHEET_URL : 'https://script.google.com/macros/s/AKfycbziqc7UWVfLyzicnEYEDydd1mc6HuJ9EtAhBjX71z9mLymtirYGit7PpJ9tKmSaW9av/exec',
 
   // Shared secret — MUST exactly match CONFIG.FORM_KEY in Code.gs.
   // This does not hide the URL above (it's public in this file),
@@ -2125,7 +2132,7 @@ function hs(){
 
   if(show){
     ssec.classList.remove('hidden');
-    smon.classList.remove('hidden');
+    // Solar Monitoring always visible regardless of Yes/No
     // Make sure card bodies are expanded (not collapsed)
     var ssecBody=ssec.querySelector('.cb');
     var ssecChev=ssec.querySelector('.cv');
@@ -2133,19 +2140,13 @@ function hs(){
       ssecBody.classList.remove('col');
       if(ssecChev) ssecChev.classList.add('open');
     }
-    var smonBody=smon.querySelector('.cb');
-    var smonChev=smon.querySelector('.cv');
-    if(smonBody && smonBody.classList.contains('col')){
-      smonBody.classList.remove('col');
-      if(smonChev) smonChev.classList.add('open');
-    }
     // Scroll to solar details after a short delay
     setTimeout(function(){
       ssec.scrollIntoView({behavior:'smooth', block:'start'});
     }, 100);
   } else {
     ssec.classList.add('hidden');
-    smon.classList.add('hidden');
+    // Solar Monitoring stays visible even when Solar = No
   }
   pg();
 }
@@ -2416,6 +2417,7 @@ function collectData(){
   d.Output_Power_kVA_B_P3_1=gv('sol_kva_b1');d.Output_Power_kVA_B_P3_2=gv('sol_kva_b2');
   d.DC_Earthing_Resistance_Ohm=gv('dc_earth_ohm');d.DC_Earthing_Below_5_Ohm=getYN('yn_de');
   d.Solar_Of_Things_Login_Email=gv('sot_email');
+  d.DtuID=gv('dtuid'); // Single DtuID for all models
   d.Grid_Export_Enabled=getYN('yn_ex');
   d.Manual_Read_Before_Installation=getYN('yn_e0');
   d.Cable_50sqmm_4Core_Copper_Conduit=getYN('yn_e1');
